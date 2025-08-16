@@ -12,8 +12,8 @@ const AuthenticatedApp = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -51,7 +51,7 @@ const getRoleDashboardPath = (role) => {
     case 'project':
       return '/dashboard/project';
     default:
-      return '/dashboard/admin'; // default ke admin jika role tidak dikenali
+      return '/dashboard/admin';
   }
 };
 

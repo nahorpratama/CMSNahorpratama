@@ -67,34 +67,37 @@ const Sidebar = ({ isOpen }) => {
       initial={false}
       animate={isOpen ? "open" : "closed"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed left-0 top-0 z-40 h-screen glass-effect border-r border-white/20 flex flex-col"
+      className="fixed left-0 top-0 z-40 h-screen glass-effect-sidebar flex flex-col theme-transition"
     >
       <div className="flex flex-col h-full overflow-hidden">
-        <div className="p-4 border-b border-white/20 flex items-center gap-3 h-[65px]">
-          <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex-shrink-0">
+        {/* Logo Section */}
+        <div className="p-4 border-b border-sidebar-border flex items-center gap-3 h-[65px]">
+          <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex-shrink-0 shadow-lg">
             <Building2 className="w-6 h-6 text-white" />
           </div>
           <motion.div variants={logoTextVariants} className="overflow-hidden">
-            <h1 className="font-bold text-lg gradient-text whitespace-nowrap">CMS</h1>
-            <p className="text-xs text-gray-400 whitespace-nowrap">Corporate Management</p>
+            <h1 className="font-bold text-lg text-sidebar-foreground">CMS</h1>
+            <p className="text-xs text-sidebar-foreground/60 whitespace-nowrap">Corporate Management</p>
           </motion.div>
         </div>
 
-        <div className="p-4 border-b border-white/20">
+        {/* User Profile Section */}
+        <div className="p-4 border-b border-sidebar-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
               <span className="text-sm font-semibold text-white">
                 {user?.name?.charAt(0) || 'A'}
               </span>
             </div>
             <motion.div variants={logoTextVariants} className="overflow-hidden">
-              <p className="font-medium text-sm whitespace-nowrap">{user?.name || 'Admin'}</p>
-              <p className="text-xs text-gray-400 capitalize whitespace-nowrap">{user?.role || 'admin'}</p>
+              <p className="font-medium text-sm whitespace-nowrap text-sidebar-foreground">{user?.name || 'Admin'}</p>
+              <p className="text-xs text-sidebar-foreground/60 capitalize whitespace-nowrap">{user?.role || 'admin'}</p>
             </motion.div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        {/* Navigation Menu */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {visibleMenuItems.map((item) => {
             const IconComponent = item.icon;
             const isActive = location.pathname.startsWith(item.path);
@@ -104,8 +107,9 @@ const Sidebar = ({ isOpen }) => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-white/10",
-                  isActive ? "bg-white/10 text-white" : "text-gray-300 hover:text-white"
+                  "flex items-center gap-4 p-3 rounded-lg transition-all duration-200",
+                  "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  isActive && "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
                 )}
               >
                 <IconComponent className="w-5 h-5 flex-shrink-0" />
