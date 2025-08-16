@@ -4,52 +4,96 @@
 
 @layer base {
   :root {
-    --background: 220 13% 6%;
-    --foreground: 220 9% 95%;
-    --card: 220 13% 8%;
-    --card-foreground: 220 9% 95%;
-    --popover: 220 13% 8%;
-    --popover-foreground: 220 9% 95%;
-    --primary: 220 8% 85%;
-    --primary-foreground: 220 13% 8%;
-    --secondary: 220 10% 15%;
-    --secondary-foreground: 220 9% 85%;
-    --muted: 220 10% 15%;
-    --muted-foreground: 220 5% 65%;
-    --accent: 220 10% 18%;
-    --accent-foreground: 220 9% 85%;
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 220 9% 95%;
-    --border: 220 10% 25%;
-    --input: 220 10% 15%;
-    --ring: 220 8% 85%;
-    --radius: 0.6rem;
+    /* Light theme colors */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --sidebar: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* Dark theme colors */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --sidebar: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224 71.4% 4.1%;
+    --sidebar-primary-foreground: 210 20% 98%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
   }
 }
 
 body {
-  @apply bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 text-gray-100 min-h-screen;
+  @apply bg-background text-foreground font-sans antialiased min-h-screen transition-colors duration-300;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* Updated component styles for theme support */
 .glass-effect {
-  @apply bg-gray-900/80 backdrop-blur-xl border border-gray-700/30;
+  @apply bg-card/80 backdrop-blur-xl border border-border/30 shadow-lg;
+}
+
+.glass-effect-sidebar {
+  @apply bg-sidebar/95 backdrop-blur-xl border-r border-sidebar-border;
 }
 
 .gradient-text {
-  @apply bg-gradient-to-r from-slate-200 to-gray-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-primary to-muted-foreground bg-clip-text text-transparent;
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-gray-900/50;
+  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/5;
 }
 
 .sidebar-item {
-  @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gray-800/60 hover:text-gray-200;
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 
+         text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
 }
 
 .sidebar-item.active {
-  @apply bg-gradient-to-r from-gray-800 to-gray-700 text-gray-100 shadow-lg border border-gray-600/30;
+  @apply bg-sidebar-primary text-sidebar-primary-foreground shadow-md;
 }
 
 .data-table {
@@ -57,35 +101,35 @@ body {
 }
 
 .data-table th {
-  @apply bg-gray-800/60 px-4 py-3 text-left font-semibold text-gray-300 border-b border-gray-700/40;
+  @apply bg-muted px-4 py-3 text-left font-semibold text-muted-foreground border-b border-border;
 }
 
 .data-table td {
-  @apply px-4 py-3 border-b border-gray-800/30;
+  @apply px-4 py-3 border-b border-border;
 }
 
 .data-table tr:hover {
-  @apply bg-gray-800/40;
+  @apply bg-muted/50;
 }
 
 .status-badge {
-  @apply px-3 py-1 rounded-full text-xs font-medium;
+  @apply px-3 py-1 rounded-full text-xs font-medium border;
 }
 
 .status-active {
-  @apply bg-emerald-500/20 text-emerald-300 border border-emerald-500/30;
+  @apply bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30;
 }
 
 .status-inactive {
-  @apply bg-red-500/20 text-red-300 border border-red-500/30;
+  @apply bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30;
 }
 
 .status-pending {
-  @apply bg-amber-500/20 text-amber-300 border border-amber-500/30;
+  @apply bg-amber-500/10 text-amber-600 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30;
 }
 
 .status-approved {
-  @apply bg-slate-500/20 text-slate-300 border border-slate-500/30;
+  @apply bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30;
 }
 
 .metric-card {
@@ -94,4 +138,21 @@ body {
 
 .chart-container {
   @apply glass-effect p-6 rounded-xl;
+}
+
+/* Modern dashboard layout utilities */
+.dashboard-grid {
+  @apply grid gap-6 p-6;
+}
+
+.dashboard-card {
+  @apply bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.dashboard-header {
+  @apply flex items-center justify-between p-6 border-b border-border bg-card/50;
+}
+
+.theme-transition {
+  @apply transition-colors duration-300 ease-in-out;
 }

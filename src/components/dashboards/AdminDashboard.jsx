@@ -11,7 +11,7 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MetricCard, ChartCard, StatsGrid } from '@/components/ui/dashboard-card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const AdminDashboard = () => {
@@ -20,268 +20,252 @@ const AdminDashboard = () => {
     {
       title: 'Total Karyawan',
       value: '248',
-      change: '+12%',
+      change: '+12% dari bulan lalu',
+      changeType: 'positive',
       icon: Users,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-500/20'
     },
     {
       title: 'Revenue Bulan Ini',
       value: 'Rp 2.4M',
-      change: '+18%',
+      change: '+8% dari bulan lalu',
+      changeType: 'positive',
       icon: DollarSign,
-      color: 'text-green-400',
-      bgColor: 'bg-green-500/20'
     },
     {
       title: 'Proyek Aktif',
-      value: '15',
-      change: '+3',
+      value: '12',
+      change: '+3 proyek baru',
+      changeType: 'positive',
       icon: Briefcase,
-      color: 'text-purple-400',
-      bgColor: 'bg-purple-500/20'
     },
     {
-      title: 'Growth Rate',
-      value: '24.5%',
-      change: '+5.2%',
+      title: 'Pertumbuhan',
+      value: '23.5%',
+      change: '+2.1% dari target',
+      changeType: 'positive',
       icon: TrendingUp,
-      color: 'text-orange-400',
-      bgColor: 'bg-orange-500/20'
     }
   ];
 
+  // Data untuk chart revenue
   const revenueData = [
-    { month: 'Jan', revenue: 1800000, expenses: 1200000 },
-    { month: 'Feb', revenue: 2100000, expenses: 1400000 },
-    { month: 'Mar', revenue: 1900000, expenses: 1300000 },
-    { month: 'Apr', revenue: 2400000, expenses: 1600000 },
-    { month: 'May', revenue: 2200000, expenses: 1500000 },
-    { month: 'Jun', revenue: 2600000, expenses: 1700000 }
+    { month: 'Jan', revenue: 2.1, target: 2.0 },
+    { month: 'Feb', revenue: 2.3, target: 2.2 },
+    { month: 'Mar', revenue: 2.8, target: 2.4 },
+    { month: 'Apr', revenue: 2.6, target: 2.5 },
+    { month: 'Mei', revenue: 3.1, target: 2.8 },
+    { month: 'Jun', revenue: 2.4, target: 2.3 }
   ];
 
+  // Data untuk chart departemen
   const departmentData = [
-    { name: 'IT', value: 45, color: '#3B82F6' },
-    { name: 'Marketing', value: 30, color: '#10B981' },
-    { name: 'Finance', value: 25, color: '#F59E0B' },
-    { name: 'HR', value: 20, color: '#EF4444' },
-    { name: 'Operations', value: 35, color: '#8B5CF6' }
+    { name: 'IT', employees: 45, budget: 850 },
+    { name: 'Finance', employees: 32, budget: 640 },
+    { name: 'HR', employees: 28, budget: 520 },
+    { name: 'Operations', employees: 67, budget: 920 },
+    { name: 'Marketing', employees: 38, budget: 780 }
   ];
 
+  // Data untuk status proyek pie chart
+  const projectStatusData = [
+    { name: 'Selesai', value: 8, color: '#10b981' },
+    { name: 'Berlangsung', value: 12, color: '#3b82f6' },
+    { name: 'Tertunda', value: 3, color: '#f59e0b' },
+    { name: 'Dibatalkan', value: 2, color: '#ef4444' }
+  ];
+
+  // Recent activities
   const recentActivities = [
     {
       id: 1,
-      type: 'success',
-      title: 'Proyek Website E-commerce Selesai',
+      type: 'user',
+      message: 'John Doe bergabung sebagai Developer',
       time: '2 jam yang lalu',
-      icon: CheckCircle
+      icon: Users,
+      color: 'text-blue-500'
     },
     {
       id: 2,
-      type: 'warning',
-      title: 'Budget Proyek Mobile App Mendekati Limit',
+      type: 'project',
+      message: 'Proyek Website E-commerce dimulai',
       time: '4 jam yang lalu',
-      icon: AlertCircle
+      icon: Briefcase,
+      color: 'text-green-500'
     },
     {
       id: 3,
-      type: 'info',
-      title: '5 Karyawan Baru Bergabung',
-      time: '1 hari yang lalu',
-      icon: Users
-    },
-    {
-      id: 4,
-      type: 'pending',
-      title: 'Review Laporan Keuangan Q2',
-      time: '2 hari yang lalu',
-      icon: Clock
+      type: 'alert',
+      message: 'Server maintenance dijadwalkan',
+      time: '6 jam yang lalu',
+      icon: AlertCircle,
+      color: 'text-amber-500'
     }
   ];
 
   return (
-    <>
+    <div className="space-y-6">
       <Helmet>
         <title>Admin Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard admin untuk overview seluruh sistem manajemen korporat" />
       </Helmet>
 
-      <div className="space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold gradient-text mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-gray-400">
-            Overview lengkap sistem manajemen korporat
-          </p>
-        </motion.div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Admin Dashboard</h1>
+        <p className="text-muted-foreground">Selamat datang kembali! Berikut ringkasan sistem Anda hari ini.</p>
+      </div>
 
-        {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {metrics.map((metric, index) => {
-            const IconComponent = metric.icon;
-            return (
-              <motion.div
-                key={metric.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+      {/* Metrics Cards */}
+      <StatsGrid>
+        {metrics.map((metric, index) => (
+          <MetricCard
+            key={index}
+            title={metric.title}
+            value={metric.value}
+            change={metric.change}
+            changeType={metric.changeType}
+            icon={metric.icon}
+          />
+        ))}
+      </StatsGrid>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Revenue Chart */}
+        <ChartCard title="Revenue vs Target">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={revenueData}>
+              <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+              <XAxis 
+                dataKey="month" 
+                className="text-muted-foreground"
+                fontSize={12}
+              />
+              <YAxis 
+                className="text-muted-foreground"
+                fontSize={12}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="revenue" 
+                stroke="hsl(var(--primary))" 
+                strokeWidth={3}
+                dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 4 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="target" 
+                stroke="hsl(var(--muted-foreground))" 
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={{ fill: 'hsl(var(--muted-foreground))', strokeWidth: 2, r: 3 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        {/* Department Overview */}
+        <ChartCard title="Overview Departemen">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={departmentData}>
+              <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+              <XAxis 
+                dataKey="name" 
+                className="text-muted-foreground"
+                fontSize={12}
+              />
+              <YAxis 
+                className="text-muted-foreground"
+                fontSize={12}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px'
+                }}
+              />
+              <Bar 
+                dataKey="employees" 
+                fill="hsl(var(--primary))" 
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Project Status */}
+        <ChartCard title="Status Proyek" className="lg:col-span-1">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={projectStatusData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={5}
+                dataKey="value"
               >
-                <Card className="metric-card">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-400 mb-1">{metric.title}</p>
-                        <p className="text-2xl font-bold">{metric.value}</p>
-                        <p className={`text-sm ${metric.color} mt-1`}>
-                          {metric.change} dari bulan lalu
-                        </p>
-                      </div>
-                      <div className={`p-3 rounded-lg ${metric.bgColor}`}>
-                        <IconComponent className={`w-6 h-6 ${metric.color}`} />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Revenue Chart */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <Card className="chart-container">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-blue-400" />
-                  Revenue vs Expenses
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                    <XAxis dataKey="month" stroke="#9CA3AF" />
-                    <YAxis stroke="#9CA3AF" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: '#1F2937', 
-                        border: '1px solid #374151',
-                        borderRadius: '8px'
-                      }} 
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#3B82F6" 
-                      strokeWidth={3}
-                      name="Revenue"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="expenses" 
-                      stroke="#EF4444" 
-                      strokeWidth={3}
-                      name="Expenses"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Department Distribution */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <Card className="chart-container">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-purple-400" />
-                  Distribusi Karyawan per Departemen
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={departmentData}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      dataKey="value"
-                      label={({ name, value }) => `${name}: ${value}`}
-                    >
-                      {departmentData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+                {projectStatusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+            {projectStatusData.map((item, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full" 
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-muted-foreground">{item.name}: {item.value}</span>
+              </div>
+            ))}
+          </div>
+        </ChartCard>
 
         {/* Recent Activities */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-green-400" />
-                Aktivitas Terbaru
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentActivities.map((activity) => {
-                  const IconComponent = activity.icon;
-                  const getStatusColor = (type) => {
-                    switch (type) {
-                      case 'success': return 'text-green-400 bg-green-500/20';
-                      case 'warning': return 'text-yellow-400 bg-yellow-500/20';
-                      case 'info': return 'text-blue-400 bg-blue-500/20';
-                      case 'pending': return 'text-gray-400 bg-gray-500/20';
-                      default: return 'text-gray-400 bg-gray-500/20';
-                    }
-                  };
-
-                  return (
-                    <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors">
-                      <div className={`p-2 rounded-lg ${getStatusColor(activity.type)}`}>
-                        <IconComponent className="w-4 h-4" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{activity.title}</p>
-                        <p className="text-sm text-gray-400">{activity.time}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        <div className="lg:col-span-2">
+          <MetricCard title="Aktivitas Terbaru" className="h-full">
+            <div className="space-y-4">
+              {recentActivities.map((activity) => (
+                <div key={activity.id} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                  <div className={`p-2 rounded-lg bg-background ${activity.color}`}>
+                    <activity.icon className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-card-foreground mb-1">
+                      {activity.message}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {activity.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </MetricCard>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

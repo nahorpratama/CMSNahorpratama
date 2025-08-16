@@ -17,7 +17,7 @@ const ProcurementManagement = lazy(() => import('@/components/procurement/Procur
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full">
-    <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+    <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 text-gray-100">
+    <div className="flex h-screen bg-background text-foreground theme-transition">
       <Sidebar isOpen={sidebarOpen} />
       
       <div className={cn(
@@ -46,23 +46,29 @@ const Dashboard = () => {
       )}>
         <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
         
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto bg-muted/30">
           <motion.div
-            key={location.pathname}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="dashboard-grid"
           >
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
+                <Route path="/admin" element={
+                  hasPermission('all') || user?.role === 'admin' ? 
+                  <AdminDashboard /> : <Navigate to={getDefaultRoute()} />
+                } />
+                <Route path="/users" element={
+                  hasPermission('user_management') ? 
+                  <UserManagement /> : <Navigate to={getDefaultRoute()} />
+                } />
+                <Route path="/finance/*" element={<FinanceDashboard />} />
+                <Route path="/hr/*" element={<HRDashboard />} />
+                <Route path="/project/*" element={<ProjectDashboard />} />
+                <Route path="/procurement" element={<ProcurementManagement />} />
+                <Route path="/chat" element={<ChatPage />} />
                 <Route path="/" element={<Navigate to={getDefaultRoute()} replace />} />
-                {hasPermission('all') && <Route path="/admin/*" element={<AdminDashboard />} />}
-                {hasPermission('user_management') && <Route path="/users" element={<UserManagement />} />}
-                {hasPermission('finance_reports') && <Route path="/finance/*" element={<FinanceDashboard />} />}
-                {hasPermission('hr_management') && <Route path="/hr/*" element={<HRDashboard />} />}
-                {hasPermission('project_management') && <Route path="/project/*" element={<ProjectDashboard />} />}
-                {hasPermission('procurement_management') && <Route path="/procurement" element={<ProcurementManagement />} />}
-                {hasPermission('chat') && <Route path="/chat" element={<ChatPage />} />}
               </Routes>
             </Suspense>
           </motion.div>
