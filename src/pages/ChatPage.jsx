@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import AddChatModal from '@/components/chat/AddChatModal';
 import GroupManageModal from '@/components/chat/GroupManageModal';
+import { useLocation } from 'react-router-dom';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,6 +45,7 @@ const getFileIcon = (fileType) => {
 const ChatPage = () => {
   const { user } = useAuth();
   const { personalContacts, groupChats, chatMode, activeChat, selectPersonalChat, selectGroupChat, selectGlobalChat, messages, loadingMessages, sendMessage, sendFile, uploadingFile, deleteMessage, unreadChats } = useChat();
+  const location = useLocation();
   
   // State lokal komponen
   const [newMessage, setNewMessage] = useState('');
@@ -54,6 +56,23 @@ const ChatPage = () => {
   // Ref untuk elemen DOM
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Deep-link handling: select chat from query params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type');
+    const id = params.get('id');
+    if (!type) return;
+    if (type === 'global') {
+      selectGlobalChat();
+    } else if (type === 'group' && id) {
+      const group = groupChats.find(g => g.id === id);
+      if (group) selectGroupChat(group);
+    } else if (type === 'personal' && id) {
+      const recipient = personalContacts.find(u => u.id === id) || { id, name: 'Pengguna' };
+      selectPersonalChat(recipient);
+    }
+  }, [location.search, groupChats, personalContacts, selectGlobalChat, selectGroupChat, selectPersonalChat]);
 
   // Fungsi untuk scroll otomatis ke pesan terakhir
   const scrollToBottom = () => {

@@ -32,17 +32,21 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
     try {
       if (n.type === 'global') {
         selectGlobalChat();
+        navigate('/dashboard/chat?type=global');
       } else if (n.type === 'group') {
         const group = groupChats?.find(g => g.id === n.chatId);
         if (group) selectGroupChat(group);
+        navigate(`/dashboard/chat?type=group&id=${encodeURIComponent(n.chatId)}`);
       } else if (n.type === 'personal') {
         const recipient = { id: n.senderId, name: n.senderName };
         selectPersonalChat(recipient);
+        navigate(`/dashboard/chat?type=personal&id=${encodeURIComponent(n.senderId)}`);
+      } else {
+        navigate('/dashboard/chat');
       }
     } catch (e) {
-      // ignore errors and still navigate
+      navigate('/dashboard/chat');
     }
-    navigate('/dashboard/chat');
     dismissNotification(n.id);
   };
 
