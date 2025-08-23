@@ -16,10 +16,10 @@ import {
   Edit,
   CheckCircle
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
+import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 
 const HRDashboard = () => {
   const { toast } = useToast();
@@ -100,33 +100,24 @@ const HRDashboard = () => {
       position: 'Full Stack Developer',
       department: 'IT',
       status: 'open',
-      applicants: 25,
-      posted: '2024-06-01',
-      deadline: '2024-07-01',
-      requirements: ['React', 'Node.js', '3+ years experience'],
-      salary: '12-18 juta'
+      applications: 12,
+      priority: 'high'
     },
     {
       id: 2,
-      position: 'Digital Marketing Specialist',
+      position: 'Marketing Specialist',
       department: 'Marketing',
-      status: 'interview',
-      applicants: 18,
-      posted: '2024-05-15',
-      deadline: '2024-06-30',
-      requirements: ['SEO/SEM', 'Social Media', '2+ years experience'],
-      salary: '8-12 juta'
+      status: 'in_progress',
+      applications: 8,
+      priority: 'medium'
     },
     {
       id: 3,
-      position: 'Product Manager',
-      department: 'Product',
+      position: 'Finance Manager',
+      department: 'Finance',
       status: 'closed',
-      applicants: 42,
-      posted: '2024-04-20',
-      deadline: '2024-05-20',
-      requirements: ['Product Strategy', 'Agile', '5+ years experience'],
-      salary: '20-25 juta'
+      applications: 15,
+      priority: 'high'
     }
   ];
 
@@ -134,36 +125,72 @@ const HRDashboard = () => {
     {
       title: 'Total Karyawan',
       value: '248',
-      change: '+12',
+      change: '+12% dari bulan lalu',
       icon: Users,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-500/20'
+      changeType: 'positive'
     },
     {
       title: 'Karyawan Aktif',
       value: '235',
-      change: '+8',
+      change: '+8% dari bulan lalu',
       icon: UserCheck,
-      color: 'text-green-400',
-      bgColor: 'bg-green-500/20'
+      changeType: 'positive'
     },
     {
-      title: 'Resign Bulan Ini',
-      value: '3',
-      change: '-2',
+      title: 'Turnover Rate',
+      value: '5.2%',
+      change: '-2.1% dari bulan lalu',
       icon: UserX,
-      color: 'text-red-400',
-      bgColor: 'bg-red-500/20'
+      changeType: 'positive'
     },
     {
-      title: 'Posisi Terbuka',
-      value: '8',
-      change: '+3',
-      icon: UserPlus,
-      color: 'text-purple-400',
-      bgColor: 'bg-purple-500/20'
+      title: 'Rata-rata Gaji',
+      value: 'Rp 12.5M',
+      change: '+15% dari bulan lalu',
+      icon: TrendingUp,
+      changeType: 'positive'
     }
   ];
+
+  const departmentStats = [
+    { name: 'IT', employees: 45, avgSalary: 15000000, turnover: 3.2 },
+    { name: 'Finance', employees: 32, avgSalary: 12000000, turnover: 4.1 },
+    { name: 'HR', employees: 28, avgSalary: 10000000, turnover: 2.8 },
+    { name: 'Operations', employees: 67, avgSalary: 11000000, turnover: 5.5 },
+    { name: 'Marketing', employees: 38, avgSalary: 13000000, turnover: 4.8 }
+  ];
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20';
+      case 'resigned':
+        return 'text-red-600 bg-red-500/10 border-red-500/20';
+      case 'open':
+        return 'text-blue-600 bg-blue-500/10 border-blue-500/20';
+      case 'in_progress':
+        return 'text-amber-600 bg-amber-500/10 border-amber-500/20';
+      case 'closed':
+        return 'text-gray-600 bg-gray-500/10 border-gray-500/20';
+      default:
+        return 'text-muted-foreground bg-muted border-border';
+    }
+  };
+
+  const getPerformanceColor = (performance) => {
+    switch (performance) {
+      case 'excellent':
+        return 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20';
+      case 'good':
+        return 'text-blue-600 bg-blue-500/10 border-blue-500/20';
+      case 'average':
+        return 'text-amber-600 bg-amber-500/10 border-amber-500/20';
+      case 'poor':
+        return 'text-red-600 bg-red-500/10 border-red-500/20';
+      default:
+        return 'text-muted-foreground bg-muted border-border';
+    }
+  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID', {
@@ -174,395 +201,212 @@ const HRDashboard = () => {
     }).format(amount);
   };
 
-  const handleEditEmployee = (id) => {
-    toast({
-      title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
-    });
-  };
-
-  const handleApproveApplication = (id) => {
-    toast({
-      title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
-    });
-  };
-
   return (
     <>
       <Helmet>
         <title>HR Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard HR untuk manajemen karyawan dan rekrutmen" />
+        <meta name="description" content="Dashboard HR untuk manajemen karyawan, recruitment, dan performa" />
       </Helmet>
-
-      <Routes>
-        <Route path="/" element={<HROverview />} />
-        <Route path="/employees" element={<EmployeeManagement />} />
-        <Route path="/recruitment" element={<RecruitmentManagement />} />
-      </Routes>
-    </>
-  );
-
-  function HROverview() {
-    return (
+      
       <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold gradient-text mb-2">
-            HR Dashboard
-          </h1>
-          <p className="text-gray-400">
-            Manajemen sumber daya manusia dan rekrutmen
-          </p>
-        </motion.div>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">HR Dashboard</h1>
+          <p className="text-muted-foreground">Manajemen sumber daya manusia dan monitoring performa karyawan</p>
+        </div>
 
-        {/* Quick Navigation */}
+        {/* Navigation Tabs */}
         <div className="flex gap-4">
-          <NavLink to="/dashboard/hr/employees">
-            <Button variant="outline" className="glass-effect border-blue-500/30 hover:bg-blue-500/20">
-              <Users className="w-4 h-4 mr-2" />
-              Data Karyawan
-            </Button>
+          <NavLink to="/dashboard/hr" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
+            <Users className="w-4 h-4" />
+            Overview
           </NavLink>
-          <NavLink to="/dashboard/hr/recruitment">
-            <Button variant="outline" className="glass-effect border-green-500/30 hover:bg-green-500/20">
-              <UserPlus className="w-4 h-4 mr-2" />
-              Rekrutmen
-            </Button>
+          <NavLink to="/dashboard/hr/employees" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
+            <UserCheck className="w-4 h-4" />
+            Karyawan
+          </NavLink>
+          <NavLink to="/dashboard/hr/recruitment" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
+            <UserPlus className="w-4 h-4" />
+            Recruitment
           </NavLink>
         </div>
 
-        {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {metrics.map((metric, index) => {
-            const IconComponent = metric.icon;
-            return (
-              <motion.div
-                key={metric.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="metric-card">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-400 mb-1">{metric.title}</p>
-                        <p className="text-2xl font-bold">{metric.value}</p>
-                        <p className={`text-sm ${metric.color} mt-1`}>
-                          {metric.change} dari bulan lalu
+        <Routes>
+          <Route path="/" element={
+            <div className="space-y-6">
+              {/* Metrics Cards */}
+              <StatsGrid>
+                {metrics.map((metric, index) => (
+                  <MetricCard
+                    key={index}
+                    title={metric.title}
+                    value={metric.value}
+                    change={metric.change}
+                    changeType={metric.changeType}
+                    icon={metric.icon}
+                    variant="elevated"
+                  />
+                ))}
+              </StatsGrid>
+
+              {/* Department Overview */}
+              <ContentGrid cols={2}>
+                <ChartCard title="Overview Departemen" variant="elevated">
+                  <div className="space-y-4">
+                    {departmentStats.map((dept, index) => (
+                      <div key={dept.name} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-3 h-3 rounded-full bg-primary"></div>
+                          <div>
+                            <p className="font-medium text-card-foreground">{dept.name}</p>
+                            <p className="text-sm text-muted-foreground">{dept.employees} karyawan</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-card-foreground">{formatCurrency(dept.avgSalary)}</p>
+                          <p className="text-sm text-muted-foreground">Turnover: {dept.turnover}%</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ChartCard>
+
+                {/* Recent Activities */}
+                <DataCard title="Aktivitas Terbaru" variant="elevated">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600">
+                        <UserPlus className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-card-foreground mb-1">
+                          Karyawan baru bergabung: Lisa Permata
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          2 hari yang lalu
                         </p>
                       </div>
-                      <div className={`p-3 rounded-lg ${metric.bgColor}`}>
-                        <IconComponent className={`w-6 h-6 ${metric.color}`} />
+                    </div>
+                    <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                      <div className="p-2 rounded-lg bg-green-500/10 text-green-600">
+                        <Award className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-card-foreground mb-1">
+                          Performance review selesai untuk Q2 2024
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          1 minggu yang lalu
+                        </p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Recent Activities */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-400" />
-                Karyawan Terbaru
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {employees.filter(emp => emp.status === 'active').slice(0, 3).map((employee) => (
-                  <div key={employee.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-semibold text-white">
-                        {employee.name.charAt(0)}
-                      </span>
+                    <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                      <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600">
+                        <Calendar className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-card-foreground mb-1">
+                          Training program dijadwalkan untuk Juli
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          2 minggu yang lalu
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">{employee.name}</p>
-                      <p className="text-sm text-gray-400">{employee.position}</p>
-                    </div>
-                    <span className="status-badge status-active">Active</span>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-green-400" />
-                Rekrutmen Aktif
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recruitmentData.filter(job => job.status !== 'closed').map((job) => (
-                  <div key={job.id} className="p-3 rounded-lg hover:bg-white/5 transition-colors">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium">{job.position}</h4>
-                      <span className={`status-badge ${
-                        job.status === 'open' ? 'status-active' : 'status-pending'
-                      }`}>
-                        {job.status}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400 mb-1">{job.department}</p>
-                    <p className="text-sm text-blue-400">{job.applicants} applicants</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
-  function EmployeeManagement() {
-    return (
-      <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold gradient-text mb-2">
-            Data Karyawan
-          </h1>
-          <p className="text-gray-400">
-            Semua detail data karyawan yang sudah resign maupun yang existing
-          </p>
-        </motion.div>
-
-        <Tabs defaultValue="active" className="space-y-6">
-          <TabsList className="glass-effect">
-            <TabsTrigger value="active">Karyawan Aktif</TabsTrigger>
-            <TabsTrigger value="resigned">Karyawan Resign</TabsTrigger>
-            <TabsTrigger value="all">Semua Karyawan</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="active">
-            <EmployeeTable employees={employees.filter(emp => emp.status === 'active')} />
-          </TabsContent>
-
-          <TabsContent value="resigned">
-            <EmployeeTable employees={employees.filter(emp => emp.status === 'resigned')} />
-          </TabsContent>
-
-          <TabsContent value="all">
-            <EmployeeTable employees={employees} />
-          </TabsContent>
-        </Tabs>
-      </div>
-    );
-  }
-
-  function EmployeeTable({ employees }) {
-    return (
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle>Daftar Karyawan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Nama</th>
-                  <th>Posisi</th>
-                  <th>Departemen</th>
-                  <th>Status</th>
-                  <th>Tanggal Bergabung</th>
-                  <th>Gaji</th>
-                  <th>Performance</th>
-                  <th>Kontak</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {employees.map((employee) => (
-                  <tr key={employee.id}>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-semibold text-white">
-                            {employee.name.charAt(0)}
-                          </span>
+                </DataCard>
+              </ContentGrid>
+            </div>
+          } />
+          
+          <Route path="/employees" element={
+            <div className="space-y-6">
+              <DataCard title="Daftar Karyawan" variant="elevated">
+                <div className="space-y-3">
+                  {employees.map((employee) => (
+                    <div key={employee.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Users className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <p className="font-medium">{employee.name}</p>
-                          <p className="text-xs text-gray-400 flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {employee.location}
+                          <p className="font-medium text-card-foreground">{employee.name}</p>
+                          <p className="text-sm text-muted-foreground">{employee.position} • {employee.department}</p>
+                          <div className="flex items-center gap-4 mt-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {employee.location}
+                            </span>
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Bergabung: {new Date(employee.joinDate).toLocaleDateString('id-ID')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(employee.status)}`}>
+                          {employee.status === 'active' ? 'Aktif' : 'Resign'}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getPerformanceColor(employee.performance)}`}>
+                          {employee.performance === 'excellent' ? 'Excellent' : 
+                           employee.performance === 'good' ? 'Good' : 
+                           employee.performance === 'average' ? 'Average' : 'Poor'}
+                        </span>
+                        <div className="text-right">
+                          <p className="font-semibold text-card-foreground">{formatCurrency(employee.salary)}</p>
+                          <p className="text-xs text-muted-foreground">{employee.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DataCard>
+            </div>
+          } />
+          
+          <Route path="/recruitment" element={
+            <div className="space-y-6">
+              <DataCard title="Status Recruitment" variant="elevated">
+                <div className="space-y-3">
+                  {recruitmentData.map((position) => (
+                    <div key={position.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                          <UserPlus className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-card-foreground">{position.position}</p>
+                          <p className="text-sm text-muted-foreground">{position.department}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {position.applications} aplikasi diterima
                           </p>
                         </div>
                       </div>
-                    </td>
-                    <td className="font-medium">{employee.position}</td>
-                    <td>
-                      <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs">
-                        {employee.department}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`status-badge ${
-                        employee.status === 'active' ? 'status-active' : 'status-inactive'
-                      }`}>
-                        {employee.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div>
-                        <p className="text-sm">{new Date(employee.joinDate).toLocaleDateString('id-ID')}</p>
-                        {employee.resignDate && (
-                          <p className="text-xs text-red-400">
-                            Resign: {new Date(employee.resignDate).toLocaleDateString('id-ID')}
-                          </p>
-                        )}
-                      </div>
-                    </td>
-                    <td className="font-semibold">
-                      {formatCurrency(employee.salary)}
-                    </td>
-                    <td>
-                      <span className={`status-badge ${
-                        employee.performance === 'excellent' ? 'status-approved' :
-                        employee.performance === 'good' ? 'status-active' : 'status-pending'
-                      }`}>
-                        {employee.performance}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="space-y-1">
-                        <p className="text-xs flex items-center gap-1">
-                          <Mail className="w-3 h-3" />
-                          {employee.email}
-                        </p>
-                        <p className="text-xs flex items-center gap-1">
-                          <Phone className="w-3 h-3" />
-                          {employee.phone}
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleEditEmployee(employee.id)}
-                        className="text-blue-400 border-blue-400/30 hover:bg-blue-400/20"
-                      >
-                        <Edit className="w-3 h-3 mr-1" />
-                        Edit
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  function RecruitmentManagement() {
-    return (
-      <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold gradient-text mb-2">
-            Rekrutmen
-          </h1>
-          <p className="text-gray-400">
-            Manajemen rekrutmen dengan fitur edit dan approval
-          </p>
-        </motion.div>
-
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle>Posisi Terbuka</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-6">
-              {recruitmentData.map((job) => (
-                <div key={job.id} className="glass-effect p-6 rounded-lg">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{job.position}</h3>
-                      <p className="text-gray-400 mb-2">{job.department} Department</p>
-                      <p className="text-green-400 font-semibold">Salary: {job.salary}</p>
-                    </div>
-                    <span className={`status-badge ${
-                      job.status === 'open' ? 'status-active' :
-                      job.status === 'interview' ? 'status-pending' : 'status-inactive'
-                    }`}>
-                      {job.status}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-blue-400" />
-                      <span className="text-sm">{job.applicants} Applicants</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-green-400" />
-                      <span className="text-sm">Posted: {new Date(job.posted).toLocaleDateString('id-ID')}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-red-400" />
-                      <span className="text-sm">Deadline: {new Date(job.deadline).toLocaleDateString('id-ID')}</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <h4 className="font-semibold mb-2">Requirements:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {job.requirements.map((req, index) => (
-                        <span key={index} className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">
-                          {req}
+                      <div className="flex items-center gap-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(position.status)}`}>
+                          {position.status === 'open' ? 'Terbuka' : 
+                           position.status === 'in_progress' ? 'Dalam Proses' : 'Ditutup'}
                         </span>
-                      ))}
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                          position.priority === 'high' ? 'text-red-600 bg-red-500/10 border-red-500/20' :
+                          position.priority === 'medium' ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
+                          'text-blue-600 bg-blue-500/10 border-blue-500/20'
+                        }`}>
+                          {position.priority === 'high' ? 'High Priority' : 
+                           position.priority === 'medium' ? 'Medium Priority' : 'Low Priority'}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleEditEmployee(job.id)}
-                      className="text-blue-400 border-blue-400/30 hover:bg-blue-400/20"
-                    >
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit
-                    </Button>
-                    {job.status !== 'closed' && (
-                      <Button
-                        onClick={() => handleApproveApplication(job.id)}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Approve Applications
-                      </Button>
-                    )}
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </DataCard>
             </div>
-          </CardContent>
-        </Card>
+          } />
+        </Routes>
       </div>
-    );
-  }
+    </>
+  );
 };
 
 export default HRDashboard;

@@ -43,25 +43,37 @@ const LoginPage = () => {
     }
     setLoading(true);
 
-    // Memanggil fungsi login dari context
-    const result = await login(credential, password);
-    
-    if (!result.success) {
+    try {
+      // Memanggil fungsi login dari context
+      const result = await login(credential, password);
+      
+      if (!result.success) {
+        toast({
+          title: "Login Gagal",
+          description: result.error,
+          variant: "destructive",
+        });
+        setLoading(false);
+      } else {
+        // Login sukses, redirect ke dashboard sesuai role
+        toast({
+          title: "Login Berhasil",
+          description: "Mengalihkan ke dashboard...",
+          variant: "default",
+        });
+        
+        // Delay sedikit untuk memastikan state auth sudah terupdate
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 500);
+      }
+    } catch (error) {
       toast({
-        title: "Login Gagal",
-        description: result.error,
+        title: "Error",
+        description: "Terjadi kesalahan saat login. Silakan coba lagi.",
         variant: "destructive",
       });
       setLoading(false);
-    } else {
-      // Login sukses, redirect ke dashboard; Auth guard akan lanjutkan ke dashboard sesuai role
-      toast({
-        title: "Login Berhasil",
-        description: "Mengalihkan ke dashboard...",
-        variant: "default",
-      });
-      setLoading(false);
-      navigate('/dashboard', { replace: true });
     }
   };
 

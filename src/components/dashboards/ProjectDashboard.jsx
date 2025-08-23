@@ -22,36 +22,30 @@ const ProjectDashboard = () => {
       </Helmet>
       
       <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold gradient-text mb-2">
-            Project Dashboard
-          </h1>
-          <p className="text-gray-400">
-            Overview proyek, task management, dan transaksi proyek
-          </p>
-        </motion.div>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Project Dashboard</h1>
+          <p className="text-muted-foreground">Overview proyek, task management, dan transaksi proyek</p>
+        </div>
 
+        {/* Navigation Tabs */}
         <div className="flex gap-4">
-            <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
-              <Briefcase className="w-4 h-4" />
-              Overview
-            </NavLink>
-            <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
-              <Target className="w-4 h-4" />
-              Manajemen Proyek
-            </NavLink>
-            <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
-              <CheckSquare className="w-4 h-4" />
-              Task Management
-            </NavLink>
-            <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
-              <TrendingUp className="w-4 h-4" />
-              Transaksi Proyek
-            </NavLink>
+          <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
+            <Briefcase className="w-4 h-4" />
+            Overview
+          </NavLink>
+          <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
+            <Target className="w-4 h-4" />
+            Manajemen Proyek
+          </NavLink>
+          <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
+            <CheckSquare className="w-4 h-4" />
+            Task Management
+          </NavLink>
+          <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
+            <TrendingUp className="w-4 h-4" />
+            Transaksi Proyek
+          </NavLink>
         </div>
 
         <Routes>

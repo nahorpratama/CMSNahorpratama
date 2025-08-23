@@ -156,3 +156,78 @@ body {
 .theme-transition {
   @apply transition-colors duration-300 ease-in-out;
 }
+
+/* Enhanced navigation tabs for consistent styling */
+.nav-tab {
+  @apply glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all;
+}
+
+.nav-tab.active {
+  @apply bg-blue-500/30;
+}
+
+.nav-tab-green {
+  @apply glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all;
+}
+
+.nav-tab-green.active {
+  @apply bg-green-500/30;
+}
+
+.nav-tab-purple {
+  @apply glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all;
+}
+
+.nav-tab-purple.active {
+  @apply bg-purple-500/30;
+}
+
+/* Consistent data item styling */
+.data-item {
+  @apply flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors;
+}
+
+.data-item-icon {
+  @apply w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center;
+}
+
+.data-item-content {
+  @apply flex-1 min-w-0;
+}
+
+.data-item-title {
+  @apply font-medium text-card-foreground;
+}
+
+.data-item-subtitle {
+  @apply text-sm text-muted-foreground;
+}
+
+.data-item-meta {
+  @apply text-xs text-muted-foreground;
+}
+
+/* Enhanced status badges */
+.status-badge-enhanced {
+  @apply px-3 py-1 rounded-full text-xs font-medium border;
+}
+
+.status-success {
+  @apply text-emerald-600 bg-emerald-500/10 border-emerald-500/20;
+}
+
+.status-warning {
+  @apply text-amber-600 bg-amber-500/10 border-amber-500/20;
+}
+
+.status-danger {
+  @apply text-red-600 bg-red-500/10 border-red-500/20;
+}
+
+.status-info {
+  @apply text-blue-600 bg-blue-500/10 border-blue-500/20;
+}
+
+.status-neutral {
+  @apply text-muted-foreground bg-muted border-border;
+}

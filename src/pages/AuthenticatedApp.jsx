@@ -1,8 +1,7 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import LoginPage from '@/pages/LoginPage';
 import Dashboard from '@/pages/Dashboard';
 
 const AuthenticatedApp = () => {
@@ -18,15 +17,9 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Jika user belum login, tampilkan halaman login
+  // Jika user belum login, redirect ke halaman login
   if (!user) {
-    return <LoginPage />;
-  }
-
-  // Jika user sudah login dan di halaman login, redirect ke dashboard sesuai role
-  if (location.pathname === '/login') {
-    const roleBasedPath = getRoleDashboardPath(user.role);
-    return <Navigate to={roleBasedPath} replace />;
+    return <Navigate to="/login" replace />;
   }
 
   // Jika user sudah login dan mengakses dashboard, tampilkan dashboard
