@@ -9,7 +9,9 @@ import {
   Filter, 
   Edit, 
   Trash2,
-  Shield
+  Shield,
+  CheckCircle,
+  UserCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +31,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
@@ -36,7 +39,8 @@ const UserManagement = () => {
     username: '',
     email: '',
     password: '',
-    role: 'project'
+    role: 'project',
+    category: 'edit'
   });
 
   // Language-specific content
@@ -48,17 +52,23 @@ const UserManagement = () => {
         totalUsers: 'Total Pengguna',
         activeUsers: 'Pengguna Aktif',
         adminUsers: 'Admin',
-        projectUsers: 'Project Users'
+        projectUsers: 'Project Users',
+        hrUsers: 'HR Users',
+        financeUsers: 'Finance Users'
       },
       actions: {
         addUser: 'Tambah Pengguna',
         searchUser: 'Cari pengguna...',
         filterRole: 'Filter Role',
+        filterCategory: 'Filter Kategori',
         allRoles: 'Semua Role',
+        allCategories: 'Semua Kategori',
         admin: 'Admin',
         finance: 'Finance',
         hr: 'HR',
-        project: 'Project'
+        project: 'Project',
+        userEdit: 'User Edit',
+        userApproval: 'User Approval'
       },
       data: {
         userList: 'Daftar Pengguna',
@@ -71,6 +81,7 @@ const UserManagement = () => {
         email: 'Email',
         password: 'Password',
         role: 'Role',
+        category: 'Kategori',
         save: 'Simpan',
         cancel: 'Batal',
         edit: 'Edit Pengguna',
@@ -94,17 +105,23 @@ const UserManagement = () => {
         totalUsers: 'Total Users',
         activeUsers: 'Active Users',
         adminUsers: 'Admin',
-        projectUsers: 'Project Users'
+        projectUsers: 'Project Users',
+        hrUsers: 'HR Users',
+        financeUsers: 'Finance Users'
       },
       actions: {
         addUser: 'Add User',
         searchUser: 'Search users...',
         filterRole: 'Filter Role',
+        filterCategory: 'Filter Category',
         allRoles: 'All Roles',
+        allCategories: 'All Categories',
         admin: 'Admin',
         finance: 'Finance',
         hr: 'HR',
-        project: 'Project'
+        project: 'Project',
+        userEdit: 'User Edit',
+        userApproval: 'User Approval'
       },
       data: {
         userList: 'User List',
@@ -117,6 +134,7 @@ const UserManagement = () => {
         email: 'Email',
         password: 'Password',
         role: 'Role',
+        category: 'Category',
         save: 'Save',
         cancel: 'Cancel',
         edit: 'Edit User',
@@ -225,7 +243,8 @@ const UserManagement = () => {
       username: '',
       email: '',
       password: '',
-      role: 'project'
+      role: 'project',
+      category: 'edit'
     });
   };
 
@@ -239,6 +258,17 @@ const UserManagement = () => {
         return 'text-blue-600 bg-blue-500/10 border-blue-500/20';
       case 'project':
         return 'text-purple-600 bg-purple-500/10 border-purple-500/20';
+      default:
+        return 'text-muted-foreground bg-muted border-border';
+    }
+  };
+
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case 'edit':
+        return 'text-orange-600 bg-orange-500/10 border-orange-500/20';
+      case 'approval':
+        return 'text-teal-600 bg-teal-500/10 border-teal-500/20';
       default:
         return 'text-muted-foreground bg-muted border-border';
     }
@@ -259,13 +289,25 @@ const UserManagement = () => {
     }
   };
 
-  // Filter users based on search and role
+  const getCategoryLabel = (category) => {
+    switch (category) {
+      case 'edit':
+        return t.actions.userEdit;
+      case 'approval':
+        return t.actions.userApproval;
+      default:
+        return category;
+    }
+  };
+
+  // Filter users based on search, role, and category
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    return matchesSearch && matchesRole;
+    const matchesCategory = categoryFilter === 'all' || user.category === categoryFilter;
+    return matchesSearch && matchesRole && matchesCategory;
   });
 
   // Calculate user counts
@@ -273,7 +315,9 @@ const UserManagement = () => {
     total: users.length,
     active: users.filter(u => u.status !== 'inactive').length,
     admin: users.filter(u => u.role === 'admin').length,
-    project: users.filter(u => u.role === 'project').length
+    project: users.filter(u => u.role === 'project').length,
+    hr: users.filter(u => u.role === 'hr').length,
+    finance: users.filter(u => u.role === 'finance').length
   };
 
   const metrics = [
@@ -365,6 +409,16 @@ const UserManagement = () => {
                   <SelectItem value="project">{t.actions.project}</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder={t.actions.filterCategory} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t.actions.allCategories}</SelectItem>
+                  <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
+                  <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -389,6 +443,12 @@ const UserManagement = () => {
                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRoleColor(user.role)}`}>
                       {getRoleLabel(user.role)}
                     </span>
+                    {/* Show category badge for HR, Finance, and Project roles */}
+                    {(user.role === 'hr' || user.role === 'finance' || user.role === 'project') && user.category && (
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(user.category)}`}>
+                        {getCategoryLabel(user.category)}
+                      </span>
+                    )}
                     <div className="flex gap-2">
                       <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
                       <AlertDialog>
@@ -441,7 +501,7 @@ const UserManagement = () => {
               <div>
                 <Label htmlFor="username">{t.form.username}</Label>
                 <Input
-                  id="name"
+                  id="username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 />
@@ -478,6 +538,21 @@ const UserManagement = () => {
                   </SelectContent>
                 </Select>
               </div>
+              {/* Show category field for HR, Finance, and Project roles */}
+              {(formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') && (
+                <div>
+                  <Label htmlFor="category">{t.form.category}</Label>
+                  <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
+                      <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <div className="flex gap-2 pt-4">
                 <Button onClick={handleCreateUser} className="flex-1">
                   {t.form.save}
@@ -547,6 +622,21 @@ const UserManagement = () => {
                     </SelectContent>
                   </Select>
                 </div>
+                {/* Show category field for HR, Finance, and Project roles */}
+                {(formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') && (
+                  <div>
+                    <Label htmlFor="edit-category">{t.form.category}</Label>
+                    <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
+                        <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="flex gap-2 pt-4">
                   <Button onClick={() => handleUpdateUser(formData)} className="flex-1">
                     {t.form.save}
@@ -571,7 +661,8 @@ const EditUserDialog = ({ user, onSave, t }) => {
     username: user.username || '',
     email: user.email || '',
     password: '',
-    role: user.role || 'project'
+    role: user.role || 'project',
+    category: user.category || 'edit'
   });
 
   const handleSubmit = () => {
@@ -639,6 +730,21 @@ const EditUserDialog = ({ user, onSave, t }) => {
               </SelectContent>
             </Select>
           </div>
+          {/* Show category field for HR, Finance, and Project roles */}
+          {(formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') && (
+            <div>
+              <Label htmlFor={`edit-${user.id}-category`}>{t.form.category}</Label>
+              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
+                  <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           <div className="flex gap-2 pt-4">
             <Button onClick={handleSubmit} className="flex-1">
               {t.form.save}
