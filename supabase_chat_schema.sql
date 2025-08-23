@@ -8,6 +8,17 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('chat-files', 'chat-files', true)
 ON CONFLICT (id) DO NOTHING;
 
+-- Add category column to profiles table if it doesn't exist
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'profiles' AND column_name = 'category'
+    ) THEN
+        ALTER TABLE profiles ADD COLUMN category VARCHAR(50);
+    END IF;
+END $$;
+
 -- Create tables untuk chat system
 
 -- Table untuk group chats
