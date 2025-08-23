@@ -450,7 +450,7 @@ const UserManagement = () => {
                       </span>
                     )}
                     <div className="flex gap-2">
-                      <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
+                                              <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-500 hover:bg-red-500/10">

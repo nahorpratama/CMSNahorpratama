@@ -51,7 +51,8 @@ const supabaseAdapter = {
         username,
         name,
         role,
-        permissions
+        permissions,
+        category
       `)
       .eq('id', userId)
       .single();
@@ -60,7 +61,7 @@ const supabaseAdapter = {
       console.error('Error fetching user profile:', error);
       return null;
     }
-    return data;
+      return data;
   },
 
   getAllUsers: async () => {
@@ -70,7 +71,8 @@ const supabaseAdapter = {
         id,
         username,
         name,
-        role
+        role,
+        category
       `);
 
     if (error) {
