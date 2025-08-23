@@ -26,9 +26,15 @@ export const ChatProvider = ({ children }) => {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [unreadChats, setUnreadChats] = useState({});
+  const [notifications, setNotifications] = useState([]);
 
   // Ref untuk subscription
   const messageSubscriptionRef = useRef(null);
+  const notificationSubscriptionRef = useRef(null);
+  const groupChatsRef = useRef([]);
+  useEffect(() => {
+    groupChatsRef.current = groupChats;
+  }, [groupChats]);
 
   const personalContacts = allUsers.filter(u => u.id !== user?.id);
 
@@ -285,6 +291,115 @@ export const ChatProvider = ({ children }) => {
       console.error('Error setting up message subscription:', error);
     }
   }, [user]);
+
+  // Global notifications subscription
+  useEffect(() => {
+    // Cleanup previous notification subscription
+    if (notificationSubscriptionRef.current) {
+      try {
+        notificationSubscriptionRef.current.unsubscribe();
+      } catch (e) {
+        console.error('Error cleaning notification subscription:', e);
+      }
+      notificationSubscriptionRef.current = null;
+    }
+
+    if (!user?.id) return;
+
+    const channelName = `notifications_${user.id}_${Date.now()}`;
+    const channel = supabase
+      .channel(channelName)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        async (payload) => {
+          const m = payload.new;
+          try {
+            // Ignore self messages
+            if (!m || m.user_id === user.id) return;
+
+            // Determine relevance
+            let isRelevant = false;
+            if (m.chat_type === 'global') {
+              isRelevant = true;
+            } else if (m.chat_type === 'personal') {
+              const chatIdStr = String(m.chat_id || '');
+              isRelevant = chatIdStr.includes(user.id);
+            } else if (m.chat_type === 'group') {
+              const groups = groupChatsRef.current || [];
+              isRelevant = !!groups.find(g => g.id === m.chat_id);
+            }
+            if (!isRelevant) return;
+
+            // Skip when user is currently viewing the same chat
+            const isViewing = (
+              (chatMode === 'global' && m.chat_type === 'global') ||
+              (chatMode === 'personal' && m.chat_type === 'personal' && activeChat?.id === m.chat_id) ||
+              (chatMode === 'group' && m.chat_type === 'group' && activeChat?.id === m.chat_id)
+            );
+            if (isViewing) return;
+
+            // Resolve sender name (best-effort)
+            let senderName = 'Pengguna';
+            try {
+              const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('name')
+                .eq('id', m.user_id)
+                .single();
+              if (!error && profile?.name) senderName = profile.name;
+            } catch (e) {
+              // ignore, fallback to default senderName
+            }
+
+            // Build notification object
+            const notif = {
+              id: m.id,
+              type: m.chat_type, // 'global' | 'personal' | 'group'
+              chatId: m.chat_id || null,
+              senderId: m.user_id,
+              senderName,
+              text: m.text || (m.file_name ? `Mengirim file: ${m.file_name}` : 'Pesan baru'),
+              createdAt: m.created_at,
+            };
+
+            setNotifications(prev => {
+              if (prev.find(n => n.id === notif.id)) return prev;
+              const next = [notif, ...prev];
+              return next.slice(0, 30); // cap size
+            });
+          } catch (e) {
+            console.error('Error handling notification message:', e);
+          }
+        }
+      )
+      .subscribe();
+
+    notificationSubscriptionRef.current = {
+      unsubscribe: () => {
+        try {
+          supabase.removeChannel(channel);
+        } catch (e) {
+          console.error('Error removing notification channel:', e);
+        }
+      }
+    };
+
+    return () => {
+      if (notificationSubscriptionRef.current) {
+        notificationSubscriptionRef.current.unsubscribe();
+        notificationSubscriptionRef.current = null;
+      }
+    };
+  }, [user?.id, chatMode, activeChat]);
+
+  const clearNotifications = useCallback(() => {
+    setNotifications([]);
+  }, []);
+
+  const dismissNotification = useCallback((id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
 
   const selectPersonalChat = useCallback(async (recipient) => {
     if (!user || !recipient) {
@@ -710,6 +825,9 @@ export const ChatProvider = ({ children }) => {
       if (messageSubscriptionRef.current) {
         messageSubscriptionRef.current.unsubscribe();
       }
+      if (notificationSubscriptionRef.current) {
+        notificationSubscriptionRef.current.unsubscribe();
+      }
     };
   }, []);
 
@@ -746,6 +864,9 @@ export const ChatProvider = ({ children }) => {
     uploadingFile,
     deleteMessage,
     unreadChats,
+    notifications,
+    clearNotifications,
+    dismissNotification,
   };
 
   return (
