@@ -172,7 +172,7 @@ const Sidebar = ({ isOpen }) => {
     { 
       title: t.menu.procurementManagement, 
       icon: ShoppingCart, 
-      path: '/dashboard/procurement', 
+      path: '/dashboard/project/procurement', 
       permission: 'procurement_management', 
       roles: ['admin', 'project'] 
     },
@@ -189,6 +189,16 @@ const Sidebar = ({ isOpen }) => {
     user?.role && item.roles.includes(user.role) && 
     (hasPermission(item.permission) || hasPermission('all'))
   );
+
+  // Function to check if a menu item should be active
+  const isMenuActive = (itemPath) => {
+    // For project-related paths, check if current location starts with the path
+    if (itemPath.startsWith('/dashboard/project')) {
+      return location.pathname.startsWith(itemPath);
+    }
+    // For other paths, check exact match or if starts with the path
+    return location.pathname === itemPath || location.pathname.startsWith(itemPath);
+  };
 
   return (
     <motion.aside
@@ -216,7 +226,7 @@ const Sidebar = ({ isOpen }) => {
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {visibleMenuItems.map((item) => {
             const IconComponent = item.icon;
-            const isActive = location.pathname.startsWith(item.path);
+            const isActive = isMenuActive(item.path);
             
             return (
               <NavLink

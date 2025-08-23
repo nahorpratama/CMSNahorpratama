@@ -13,7 +13,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 const UserManagement = lazy(() => import('@/components/admin/UserManagement'));
-const ProcurementManagement = lazy(() => import('@/components/procurement/ProcurementManagement'));
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full">
@@ -66,10 +65,6 @@ const Dashboard = () => {
                 <Route path="finance/*" element={<FinanceDashboard />} />
                 <Route path="hr/*" element={<HRDashboard />} />
                 <Route path="project/*" element={<ProjectDashboard />} />
-                <Route path="procurement" element={
-                  hasPermission('procurement_management') ? 
-                  <ProcurementManagement /> : <Navigate to={getDefaultRoute()} />
-                } />
                 <Route path="chat" element={<ChatPage />} />
                 <Route index element={<Navigate to={getDefaultRoute()} replace />} />
               </Routes>
