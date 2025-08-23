@@ -1,14 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon } from 'lucide-react';
+import { Menu, Bell, Settings, MessageSquare, Sun, Moon, LogOut, Users, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 
 const Header = ({ onToggleSidebar, sidebarOpen }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, allUsers } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -22,12 +30,6 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
   };
 
   const handleNotificationClick = () => {
-    toast({
-      title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
-    });
-  };
-
-  const handleSettingsClick = () => {
     toast({
       title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
     });
@@ -65,16 +67,6 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggleTheme}
-            className="hover:bg-accent hover:text-accent-foreground"
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
             onClick={() => navigate('/dashboard/chat')}
             className="hover:bg-accent hover:text-accent-foreground relative"
           >
@@ -93,23 +85,107 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
             </span>
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleSettingsClick}
-            className="hover:bg-accent hover:text-accent-foreground"
-          >
-            <Settings className="w-5 h-5" />
-          </Button>
+          {/* Settings Dropdown Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-accent hover:text-accent-foreground"
+              >
+                <Settings className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80" align="end">
+              <DropdownMenuLabel className="text-base font-semibold">
+                Pengaturan & Informasi
+              </DropdownMenuLabel>
+              
+              <DropdownMenuSeparator />
+              
+              {/* Theme Toggle */}
+              <DropdownMenuItem 
+                onClick={toggleTheme}
+                className="cursor-pointer"
+              >
+                <div className="flex items-center gap-3 w-full">
+                  <div className="p-2 bg-accent rounded-md">
+                    <Palette className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">Ubah Tema</p>
+                    <p className="text-xs text-muted-foreground">
+                      {isDarkMode ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'}
+                    </p>
+                  </div>
+                  <div className="p-1 bg-accent rounded">
+                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  </div>
+                </div>
+              </DropdownMenuItem>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLogout}
-            className="hover:bg-destructive/20 hover:text-destructive"
-          >
-            <LogOut className="w-5 h-5" />
-          </Button>
+              <DropdownMenuSeparator />
+
+              {/* User List Section */}
+              <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
+                Pengguna yang Sedang Online
+              </DropdownMenuLabel>
+              
+              <div className="max-h-32 overflow-y-auto space-y-1">
+                {allUsers.length > 0 ? (
+                  allUsers.map((userItem) => (
+                    <DropdownMenuItem key={userItem.id} className="cursor-default">
+                      <div className="flex items-center gap-3 w-full">
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs font-semibold text-white">
+                            {userItem.name?.charAt(0) || 'U'}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{userItem.name || 'Unknown User'}</p>
+                          <p className="text-xs text-muted-foreground capitalize truncate">
+                            {userItem.role || 'user'}
+                          </p>
+                        </div>
+                        <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                      </div>
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <DropdownMenuItem className="cursor-default">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                        <Users className="w-4 h-4 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground">Tidak ada pengguna online</p>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+                )}
+              </div>
+
+              <DropdownMenuSeparator />
+
+              {/* Logout Button */}
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <div className="flex items-center gap-3 w-full">
+                  <div className="p-2 bg-destructive/10 rounded-md">
+                    <LogOut className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">Keluar dari Sistem</p>
+                    <p className="text-xs text-muted-foreground">
+                      Logout dan kembali ke halaman login
+                    </p>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </motion.header>
