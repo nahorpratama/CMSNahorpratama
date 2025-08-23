@@ -16,7 +16,9 @@ import {
   Target,
   TrendingUp,
   Truck,
-  ShoppingCart
+  ShoppingCart,
+  UserCheck,
+  ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -122,14 +124,14 @@ const Sidebar = ({ isOpen }) => {
     },
     { 
       title: t.menu.hrDashboard, 
-      icon: Users, 
+      icon: Building2, 
       path: '/dashboard/hr', 
       permission: 'hr_management', 
       roles: ['admin', 'hr'] 
     },
     { 
       title: t.menu.employeeData, 
-      icon: Users, 
+      icon: UserCheck, 
       path: '/dashboard/hr/employees', 
       permission: 'hr_management', 
       roles: ['admin', 'hr'] 

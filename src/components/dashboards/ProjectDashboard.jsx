@@ -142,23 +142,23 @@ const ProjectDashboard = () => {
 
         {/* Navigation Tabs */}
         <div className="flex gap-4 flex-wrap">
-          <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
+          <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all whitespace-nowrap ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Briefcase className="w-4 h-4" />
             {t.navigation.overview}
           </NavLink>
-          <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
+          <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all whitespace-nowrap ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Target className="w-4 h-4" />
             {t.navigation.management}
           </NavLink>
-          <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
+          <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all whitespace-nowrap ${isActive ? 'bg-green-500/30' : ''}`}>
             <CheckSquare className="w-4 h-4" />
             {t.navigation.tasks}
           </NavLink>
-          <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
+          <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all whitespace-nowrap ${isActive ? 'bg-purple-500/30' : ''}`}>
             <TrendingUp className="w-4 h-4" />
             {t.navigation.transactions}
           </NavLink>
-          <NavLink to="/dashboard/project/procurement" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-amber-500/30' : ''}`}>
+          <NavLink to="/dashboard/project/procurement" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all whitespace-nowrap ${isActive ? 'bg-amber-500/30' : ''}`}>
             <ShoppingCart className="w-4 h-4" />
             {t.navigation.procurement}
           </NavLink>
