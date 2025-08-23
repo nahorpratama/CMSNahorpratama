@@ -58,20 +58,57 @@ Saat ini sistem mendukung 2 nilai category:
 - `'edit'` - User dengan permission edit
 - `'approval'` - User dengan permission approval
 
-### 5. Cara Penggunaan
+### 5. Update Supabase Edge Functions
+
+Supabase Edge Functions telah diupdate untuk menangani field `category`:
+
+**File yang dibuat:**
+- `supabase-functions/create-user/index.ts` - Function untuk create user
+- `supabase-functions/update-user/index.ts` - Function untuk update user
+
+**Deploy functions:**
+```bash
+# Install Supabase CLI jika belum ada
+npm install -g supabase
+
+# Login ke Supabase
+supabase login
+
+# Deploy functions
+./deploy-functions.sh
+```
+
+### 6. Cara Penggunaan
 
 1. **Jalankan script SQL** di Supabase untuk menambah kolom
-2. **Restart aplikasi** agar perubahan ter-load
-3. **Edit user** dengan role HR, Finance, atau Project
-4. **Pilih category** dari dropdown (edit/approval)
-5. **Simpan** - sekarang akan berhasil tersimpan ke database
+2. **Deploy Edge Functions** untuk create/update user
+3. **Restart aplikasi** agar perubahan ter-load
+4. **Tambah user baru** dengan role HR, Finance, atau Project ✅
+5. **Edit user existing** dengan role tersebut ✅
+6. **Pilih category** dari dropdown (edit/approval)
+7. **Simpan** - sekarang akan berhasil tersimpan ke database
 
 ## Testing
 
 Setelah implementasi, test dengan:
-1. Buat user baru dengan role HR/Finance/Project
-2. Edit user existing dengan role tersebut
-3. Pastikan field category tersimpan dan ter-load dengan benar
+1. **Buat user baru** dengan role HR/Finance/Project dan pilih category ✅
+2. **Edit user existing** dengan role tersebut dan ubah category ✅
+3. **Pastikan field category tersimpan** dan ter-load dengan benar
+4. **Verifikasi di database** bahwa field category tersimpan
+
+## File Implementasi
+
+### Database Schema
+- `add_category_column.sql` - Script untuk tambah kolom category
+- `supabase_chat_schema.sql` - Schema lengkap (updated)
+
+### Supabase Edge Functions  
+- `supabase-functions/create-user/index.ts` - Create user dengan category
+- `supabase-functions/update-user/index.ts` - Update user dengan category
+- `deploy-functions.sh` - Script deploy functions
+
+### Frontend Updates
+- `src/services/supabaseAdapter.js` - Updated untuk field category
 
 ## Catatan
 
