@@ -107,7 +107,9 @@ const ProcurementManagement = () => {
   const [filters, setFilters] = useState({ type: 'all', status: 'all' });
   const [loadingUpload, setLoadingUpload] = useState(false);
 
-  const isAdmin = user.role === 'admin';
+  // Hanya user dengan role project yang bisa edit dan add
+  const canEdit = user?.role === 'project';
+  const isAdmin = user?.role === 'admin';
 
   const handleCreate = async (data) => {
     const result = await createEquipment(data);
@@ -209,21 +211,28 @@ const ProcurementManagement = () => {
               <div className="flex justify-between items-center">
                 <CardTitle className="flex items-center gap-2"><Filter />Filter & Aksi</CardTitle>
                 <div className="flex gap-2">
-                  {isAdmin && (<>
-                    <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
-                      <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" />Tambah Alat</Button>
-                      </DialogTrigger>
-                      <DialogContent className="glass-effect"><DialogHeader><DialogTitle>Tambah Peralatan Baru</DialogTitle></DialogHeader><EquipmentForm onSave={handleCreate} onFinished={() => setOpenAddDialog(false)}/></DialogContent>
-                    </Dialog>
-                    <Button asChild variant="outline">
-                      <Label htmlFor="excel-upload">
-                        {loadingUpload ? <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2"></span> : <Upload className="mr-2 h-4 w-4" />}
-                        Unggah Excel
-                        <Input id="excel-upload" type="file" className="hidden" onChange={handleFileUpload} accept=".xlsx, .xls" disabled={loadingUpload} />
-                      </Label>
-                    </Button>
-                  </>)}
+                  {canEdit && (
+                    <>
+                      <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
+                        <DialogTrigger asChild>
+                          <Button><PlusCircle className="mr-2 h-4 w-4" />Tambah Alat</Button>
+                        </DialogTrigger>
+                        <DialogContent className="glass-effect"><DialogHeader><DialogTitle>Tambah Peralatan Baru</DialogTitle></DialogHeader><EquipmentForm onSave={handleCreate} onFinished={() => setOpenAddDialog(false)}/></DialogContent>
+                      </Dialog>
+                      <Button asChild variant="outline">
+                        <Label htmlFor="excel-upload">
+                          {loadingUpload ? <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2"></span> : <Upload className="mr-2 h-4 w-4" />}
+                          Unggah Excel
+                          <Input id="excel-upload" type="file" className="hidden" onChange={handleFileUpload} accept=".xlsx, .xls" disabled={loadingUpload} />
+                        </Label>
+                      </Button>
+                    </>
+                  )}
+                  {!canEdit && isAdmin && (
+                    <div className="text-sm text-gray-400 italic">
+                      Hanya user project yang dapat mengedit data procurement
+                    </div>
+                  )}
                 </div>
               </div>
             </CardHeader>
@@ -268,12 +277,12 @@ const ProcurementManagement = () => {
                       <th className="p-3">Status</th>
                       <th className="p-3">Tgl Pembelian</th>
                       <th className="p-3">Perawatan Terakhir</th>
-                      {isAdmin && <th className="p-3 text-right">Aksi</th>}
+                      {canEdit && <th className="p-3 text-right">Aksi</th>}
                     </tr>
                   </thead>
                   <tbody>
                   {loadingEquipment ? (
-                      <tr><td colSpan={isAdmin ? 7 : 6} className="text-center p-6">Memuat data...</td></tr>
+                      <tr><td colSpan={canEdit ? 7 : 6} className="text-center p-6">Memuat data...</td></tr>
                   ) : filteredEquipment.length > 0 ? (
                     filteredEquipment.map(item => (
                       <tr key={item.id} className="border-b border-white/10 hover:bg-white/5">
@@ -283,7 +292,7 @@ const ProcurementManagement = () => {
                         <td className="p-3"><span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-300">{item.status}</span></td>
                         <td className="p-3 text-gray-400">{item.purchase_date}</td>
                         <td className="p-3 text-gray-400">{item.last_maintenance_date}</td>
-                        {isAdmin && <td className="p-3 text-right">
+                        {canEdit && <td className="p-3 text-right">
                           <Dialog><DialogTrigger asChild>
                             <Button variant="ghost" size="icon" className="text-yellow-400 hover:text-yellow-300"><Edit className="h-4 w-4" /></Button>
                           </DialogTrigger><DialogContent className="glass-effect">
@@ -300,7 +309,7 @@ const ProcurementManagement = () => {
                       </tr>
                     ))
                   ) : (
-                    <tr><td colSpan={isAdmin ? 7 : 6} className="text-center p-6 text-gray-400">Tidak ada data yang cocok dengan filter.</td></tr>
+                    <tr><td colSpan={canEdit ? 7 : 6} className="text-center p-6 text-gray-400">Tidak ada data yang cocok dengan filter.</td></tr>
                   )}
                   </tbody>
                 </table>
