@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon, Users } from 'lucide-react';
+import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon, User, Camera, Globe, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,13 +18,17 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useChat } from '@/contexts/ChatContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = ({ onToggleSidebar, sidebarOpen }) => {
-  const { user, logout, allUsers } = useAuth();
+  const { user, logout } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
+  const { language, setLanguage } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { notifications, clearNotifications, dismissNotification, groupChats, selectGlobalChat, selectGroupChat, selectPersonalChat } = useChat();
+  
+  const [profileImage, setProfileImage] = useState(user?.profileImage || null);
   
   const notificationCount = notifications.length;
   
@@ -53,9 +57,48 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
   const handleLogout = () => {
     logout();
     toast({
-      title: "Logout Berhasil",
-      description: "Anda telah keluar dari sistem",
+      title: language === 'id' ? "Logout Berhasil" : "Logout Successful",
+      description: language === 'id' ? "Anda telah keluar dari sistem" : "You have been logged out of the system",
     });
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: language === 'id' ? "File Terlalu Besar" : "File Too Large",
+          description: language === 'id' ? "Ukuran file maksimal 5MB" : "Maximum file size is 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target.result);
+        toast({
+          title: language === 'id' ? "Foto Berhasil Diubah" : "Photo Changed Successfully",
+          description: language === 'id' ? "Foto profil Anda telah diperbarui" : "Your profile photo has been updated",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const getLanguageLabel = (lang) => {
+    switch (lang) {
+      case 'id':
+        return 'Indonesia';
+      case 'en':
+        return 'English';
+      default:
+        return 'Indonesia';
+    }
+  };
+
+  const getCurrentLanguageLabel = () => {
+    return getLanguageLabel(language);
   };
 
   return (
@@ -78,7 +121,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
           
           <div>
             <h2 className="text-xl font-semibold text-foreground">
-              Selamat Datang, {user?.name}
+              {language === 'id' ? `Selamat Datang, ${user?.name}` : `Welcome, ${user?.name}`}
             </h2>
             <p className="text-sm text-muted-foreground capitalize">
               {user?.role} Dashboard
@@ -92,7 +135,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
             size="icon"
             onClick={() => navigate('/dashboard/chat')}
             className="hover:bg-accent hover:text-accent-foreground relative"
-            title="Buka Chat"
+            title={language === 'id' ? "Buka Chat" : "Open Chat"}
           >
             <MessageSquare className="w-5 h-5" />
           </Button>
@@ -103,7 +146,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                 variant="ghost"
                 size="icon"
                 className="hover:bg-accent hover:text-accent-foreground relative"
-                title="Notifikasi Chat"
+                title={language === 'id' ? "Notifikasi Chat" : "Chat Notifications"}
               >
                 <Bell className="w-5 h-5" />
                 {notificationCount > 0 && (
@@ -114,10 +157,12 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifikasi Chat</DropdownMenuLabel>
+              <DropdownMenuLabel>{language === 'id' ? "Notifikasi Chat" : "Chat Notifications"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {notificationCount === 0 ? (
-                <div className="px-2 py-6 text-center text-sm text-muted-foreground">Tidak ada notifikasi baru</div>
+                <div className="px-2 py-6 text-center text-sm text-muted-foreground">
+                  {language === 'id' ? "Tidak ada notifikasi baru" : "No new notifications"}
+                </div>
               ) : (
                 <div className="max-h-80 overflow-auto">
                   {notifications.map((n) => (
@@ -134,14 +179,21 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                           {n.type === 'global' ? '[Global]' : n.type === 'group' ? '[Grup]' : '[Personal]'} {n.text}
                         </p>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); dismissNotification(n.id); }} title="Tutup">
+                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); dismissNotification(n.id); }} title={language === 'id' ? "Tutup" : "Close"}>
                         ×
                       </Button>
                     </div>
                   ))}
                 </div>
               )}
-              {notificationCount > 0 && <><DropdownMenuSeparator /><DropdownMenuItem className="cursor-pointer text-center text-blue-600" onClick={clearNotifications}>Bersihkan semua</DropdownMenuItem></>}
+              {notificationCount > 0 && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer text-center text-blue-600" onClick={clearNotifications}>
+                    {language === 'id' ? "Bersihkan semua" : "Clear all"}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -151,63 +203,117 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                 variant="ghost"
                 size="icon"
                 className="hover:bg-accent hover:text-accent-foreground"
-                title="Pengaturan"
+                title={language === 'id' ? "Pengaturan" : "Settings"}
               >
                 <Settings className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-72">
-              <DropdownMenuLabel>Pengaturan</DropdownMenuLabel>
+              <DropdownMenuLabel>{language === 'id' ? "Pengaturan" : "Settings"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
-                <div className="flex items-start gap-3">
-                  {isDarkMode ? <Sun className="w-4 h-4 mt-0.5" /> : <Moon className="w-4 h-4 mt-0.5" />}
+              {/* User Profile Section */}
+              <DropdownMenuItem className="cursor-pointer">
+                <div className="flex items-start gap-3 w-full">
+                  <div className="relative">
+                    {profileImage ? (
+                      <img 
+                        src={profileImage} 
+                        alt="Profile" 
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center">
+                        <span className="text-sm font-semibold">{user?.name?.charAt(0) || 'U'}</span>
+                      </div>
+                    )}
+                    <label htmlFor="profile-image" className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-primary/80 transition-colors">
+                      <Camera className="w-3 h-3 text-white" />
+                    </label>
+                    <input
+                      id="profile-image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">Ubah Tema</span>
-                    <span className="text-xs text-muted-foreground">Beralih ke {isDarkMode ? 'tema terang' : 'tema gelap'}</span>
+                    <span className="text-sm font-medium">{user?.name}</span>
+                    <span className="text-xs text-muted-foreground capitalize">{user?.role}</span>
                   </div>
                 </div>
               </DropdownMenuItem>
 
+              <DropdownMenuSeparator />
+
+              {/* Theme Toggle */}
+              <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+                <div className="flex items-start gap-3">
+                  {isDarkMode ? <Sun className="w-4 h-4 mt-0.5" /> : <Moon className="w-4 h-4 mt-0.5" />}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">
+                      {language === 'id' ? "Ubah Tema" : "Change Theme"}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {language === 'id' 
+                        ? `Beralih ke ${isDarkMode ? 'tema terang' : 'tema gelap'}`
+                        : `Switch to ${isDarkMode ? 'light theme' : 'dark theme'}`
+                      }
+                    </span>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+
+              {/* Language Selection */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span>Daftar Pengguna</span>
+                    <Languages className="w-4 h-4" />
+                    <span>{language === 'id' ? "Bahasa" : "Language"}</span>
                   </div>
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="w-64">
-                  <DropdownMenuLabel>Pengguna Login ({allUsers?.length || 0})</DropdownMenuLabel>
+                <DropdownMenuSubContent className="w-48">
+                  <DropdownMenuLabel>
+                    {language === 'id' ? "Pilih Bahasa" : "Select Language"}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <div className="max-h-60 overflow-auto">
-                    {allUsers && allUsers.length > 0 ? (
-                      allUsers.map((u) => (
-                        <div key={u.id} className="px-2 py-1.5 text-sm flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center">
-                            <span className="text-xs font-semibold">{u?.name?.charAt(0) || 'U'}</span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-medium leading-tight">{u?.name || 'Pengguna'}</span>
-                            <span className="text-xs text-muted-foreground capitalize leading-tight">{u?.role || 'role tidak diketahui'}</span>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="px-2 py-1.5 text-sm text-muted-foreground">Belum ada pengguna login.</div>
-                    )}
-                  </div>
+                  <DropdownMenuItem 
+                    onClick={() => setLanguage('id')} 
+                    className={`cursor-pointer ${language === 'id' ? 'bg-accent' : ''}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4" />
+                      <span>Indonesia</span>
+                      {language === 'id' && <span className="text-xs text-muted-foreground">(Current)</span>}
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => setLanguage('en')} 
+                    className={`cursor-pointer ${language === 'en' ? 'bg-accent' : ''}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4" />
+                      <span>English</span>
+                      {language === 'en' && <span className="text-xs text-muted-foreground">(Current)</span>}
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
 
               <DropdownMenuSeparator />
 
+              {/* Logout */}
               <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                 <div className="flex items-start gap-3">
                   <LogOut className="w-4 h-4 mt-0.5" />
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">Keluar</span>
-                    <span className="text-xs text-muted-foreground">Keluar dari akun Anda</span>
+                    <span className="text-sm font-medium">
+                      {language === 'id' ? "Keluar" : "Logout"}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {language === 'id' ? "Keluar dari akun Anda" : "Sign out of your account"}
+                    </span>
                   </div>
                 </div>
               </DropdownMenuItem>

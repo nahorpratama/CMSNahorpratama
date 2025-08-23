@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { LogIn, Building2 } from 'lucide-react';
+import { LogIn, Building2, Languages, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,15 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 /**
  * Komponen untuk halaman Login.
@@ -25,6 +34,59 @@ const LoginPage = () => {
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { language, setLanguage } = useLanguage();
+
+  // Language-specific content
+  const content = {
+    id: {
+      title: 'Corporate Portal',
+      subtitle: 'Sistem Manajemen Korporat Terpadu',
+      credentialLabel: 'Username atau Email',
+      credentialPlaceholder: 'Masukkan username atau email Anda',
+      passwordLabel: 'Password',
+      passwordPlaceholder: 'Masukkan password Anda',
+      loginButton: 'Masuk',
+      inputIncomplete: 'Input Tidak Lengkap',
+      inputIncompleteDesc: 'Harap masukkan email/username dan password.',
+      loginFailed: 'Login Gagal',
+      loginSuccess: 'Login Berhasil',
+      loginSuccessDesc: 'Mengalihkan ke dashboard...',
+      error: 'Error',
+      errorDesc: 'Terjadi kesalahan saat login. Silakan coba lagi.',
+      pageTitle: 'Login - Corporate Management System',
+      pageDesc: 'Login ke sistem manajemen korporat dengan role-based access',
+      language: 'Bahasa',
+      selectLanguage: 'Pilih Bahasa',
+      indonesia: 'Indonesia',
+      english: 'English',
+      current: '(Saat Ini)'
+    },
+    en: {
+      title: 'Corporate Portal',
+      subtitle: 'Integrated Corporate Management System',
+      credentialLabel: 'Username or Email',
+      credentialPlaceholder: 'Enter your username or email',
+      passwordLabel: 'Password',
+      passwordPlaceholder: 'Enter your password',
+      loginButton: 'Login',
+      inputIncomplete: 'Incomplete Input',
+      inputIncompleteDesc: 'Please enter email/username and password.',
+      loginFailed: 'Login Failed',
+      loginSuccess: 'Login Successful',
+      loginSuccessDesc: 'Redirecting to dashboard...',
+      error: 'Error',
+      errorDesc: 'An error occurred during login. Please try again.',
+      pageTitle: 'Login - Corporate Management System',
+      pageDesc: 'Login to corporate management system with role-based access',
+      language: 'Language',
+      selectLanguage: 'Select Language',
+      indonesia: 'Indonesia',
+      english: 'English',
+      current: '(Current)'
+    }
+  };
+
+  const t = content[language];
 
   /**
    * Menangani proses submit form login.
@@ -35,8 +97,8 @@ const LoginPage = () => {
     // Validasi input
     if (!credential || !password) {
       toast({
-        title: "Input Tidak Lengkap",
-        description: "Harap masukkan email/username dan password.",
+        title: t.inputIncomplete,
+        description: t.inputIncompleteDesc,
         variant: "destructive",
       });
       return;
@@ -49,7 +111,7 @@ const LoginPage = () => {
       
       if (!result.success) {
         toast({
-          title: "Login Gagal",
+          title: t.loginFailed,
           description: result.error,
           variant: "destructive",
         });
@@ -57,8 +119,8 @@ const LoginPage = () => {
       } else {
         // Login sukses, redirect ke dashboard sesuai role
         toast({
-          title: "Login Berhasil",
-          description: "Mengalihkan ke dashboard...",
+          title: t.loginSuccess,
+          description: t.loginSuccessDesc,
           variant: "default",
         });
         
@@ -69,8 +131,8 @@ const LoginPage = () => {
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Terjadi kesalahan saat login. Silakan coba lagi.",
+        title: t.error,
+        description: t.errorDesc,
         variant: "destructive",
       });
       setLoading(false);
@@ -80,8 +142,8 @@ const LoginPage = () => {
   return (
     <>
       <Helmet>
-        <title>Login - Corporate Management System</title>
-        <meta name="description" content="Login ke sistem manajemen korporat dengan role-based access" />
+        <title>{t.pageTitle}</title>
+        <meta name="description" content={t.pageDesc} />
       </Helmet>
       
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-indigo-900 text-white flex items-center justify-center p-4">
@@ -91,6 +153,42 @@ const LoginPage = () => {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md mx-auto"
         >
+          {/* Language Selector */}
+          <div className="flex justify-end mb-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
+                  <Globe className="w-4 h-4 mr-2" />
+                  {t.language}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>{t.selectLanguage}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => setLanguage('id')} 
+                  className={`cursor-pointer ${language === 'id' ? 'bg-accent' : ''}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Languages className="w-4 h-4" />
+                    <span>{t.indonesia}</span>
+                    {language === 'id' && <span className="text-xs text-muted-foreground">{t.current}</span>}
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setLanguage('en')} 
+                  className={`cursor-pointer ${language === 'en' ? 'bg-accent' : ''}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Languages className="w-4 h-4" />
+                    <span>{t.english}</span>
+                    {language === 'en' && <span className="text-xs text-muted-foreground">{t.current}</span>}
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
           <Card className="glass-effect p-8 shadow-2xl">
             <div className="text-center mb-8">
               <motion.div
@@ -102,35 +200,35 @@ const LoginPage = () => {
                 <Building2 className="w-10 h-10 text-white" />
               </motion.div>
               <h1 className="text-4xl font-bold gradient-text mb-2">
-                Corporate Portal
+                {t.title}
               </h1>
               <p className="text-gray-400">
-                Sistem Manajemen Korporat Terpadu
+                {t.subtitle}
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="credential">Username atau Email</Label>
+                <Label htmlFor="credential">{t.credentialLabel}</Label>
                 <Input
                   id="credential"
                   type="text"
                   value={credential}
                   onChange={(e) => setCredential(e.target.value)}
-                  placeholder="Masukkan username atau email Anda"
+                  placeholder={t.credentialPlaceholder}
                   required
                   className="bg-white/5 border-white/20 h-12 text-base"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t.passwordLabel}</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Masukkan password Anda"
+                  placeholder={t.passwordPlaceholder}
                   required
                   className="bg-white/5 border-white/20 h-12 text-base"
                 />
@@ -150,7 +248,7 @@ const LoginPage = () => {
                 ) : (
                   <>
                     <LogIn className="w-5 h-5 mr-2" />
-                    Masuk
+                    {t.loginButton}
                   </>
                 )}
               </Button>

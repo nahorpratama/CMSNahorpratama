@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ChatProvider } from '@/contexts/ChatContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import LoginPage from '@/pages/LoginPage';
 import { DatabaseProvider } from '@/contexts/DatabaseContext';
 import AuthenticatedApp from '@/pages/AuthenticatedApp'; // Impor komponen AuthenticatedApp
@@ -37,31 +38,33 @@ function App() {
         <title>Corporate Management System</title>
         <meta name="description" content="Sistem manajemen korporat dengan role-based access control untuk admin, keuangan, HR, dan proyek" />
       </Helmet>
-      <ThemeProvider>
-        <DatabaseProvider>
-          <AuthProvider>
-            <ChatProvider>
-              <div className="min-h-screen bg-background text-foreground theme-transition">
-                <Suspense fallback={<LoadingSpinner />}>
-                  <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route
-                      path="/dashboard/*"
-                      element={
-                        <ProtectedRoute>
-                          <AuthenticatedApp />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                  </Routes>
-                </Suspense>
-                <Toaster />
-              </div>
-            </ChatProvider>
-          </AuthProvider>
-        </DatabaseProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <DatabaseProvider>
+            <AuthProvider>
+              <ChatProvider>
+                <div className="min-h-screen bg-background text-foreground theme-transition">
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <Routes>
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route
+                        path="/dashboard/*"
+                        element={
+                          <ProtectedRoute>
+                            <AuthenticatedApp />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    </Routes>
+                  </Suspense>
+                  <Toaster />
+                </div>
+              </ChatProvider>
+            </AuthProvider>
+          </DatabaseProvider>
+        </ThemeProvider>
+      </LanguageProvider>
     </Router>
     </HelmetProvider>
   );
