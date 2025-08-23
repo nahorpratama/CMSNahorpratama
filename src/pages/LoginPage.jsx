@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Komponen untuk halaman Login.
@@ -23,6 +24,7 @@ const LoginPage = () => {
   // Mengambil fungsi login dari AuthContext
   const { login } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   /**
    * Menangani proses submit form login.
@@ -52,12 +54,14 @@ const LoginPage = () => {
       });
       setLoading(false);
     } else {
-      // Login sukses, biarkan useEffect di App.jsx menangani redirect
+      // Login sukses, redirect ke dashboard; Auth guard akan lanjutkan ke dashboard sesuai role
       toast({
         title: "Login Berhasil",
         description: "Mengalihkan ke dashboard...",
         variant: "default",
       });
+      setLoading(false);
+      navigate('/dashboard', { replace: true });
     }
   };
 
