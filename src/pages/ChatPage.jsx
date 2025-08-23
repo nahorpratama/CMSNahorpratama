@@ -159,7 +159,11 @@ const ChatPage = () => {
           <div className="flex-1 overflow-y-auto p-2">
             {/* Item Chat Global */}
             <div 
-              className={cn("flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 cursor-pointer transition-colors mb-2", chatMode === 'global' && !activeChat && "bg-blue-500/30")}
+              className={cn("flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 cursor-pointer transition-colors mb-2", 
+                chatMode === 'global' && !activeChat 
+                  ? "bg-black text-white" 
+                  : "text-gray-300 hover:text-white"
+              )}
               onClick={selectGlobalChat}
             >
               <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0"><MessageSquare className="w-5 h-5 text-white" /></div>
@@ -180,7 +184,11 @@ const ChatPage = () => {
               </Button>
             </div>
             {filteredGroupChats.map((group) => (
-              <div key={group.id} className={cn("relative flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 cursor-pointer transition-colors", activeChat?.id === group.id && "bg-blue-500/30")} onClick={() => selectGroupChat(group)}>
+              <div key={group.id} className={cn("relative flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 cursor-pointer transition-colors", 
+                activeChat?.id === group.id 
+                  ? "bg-black text-white" 
+                  : "text-gray-300 hover:text-white"
+              )} onClick={() => selectGroupChat(group)}>
                 <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0"><Users className="w-5 h-5 text-white" /></div>
                 <div><p className="font-medium text-sm">{group.name}</p></div>
                 {unreadChats[group.id] && <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-red-500 rounded-full"></span>}
@@ -192,9 +200,20 @@ const ChatPage = () => {
             {filteredPersonalContacts.map((u) => {
               const chatId = [user.id, u.id].sort().join('_');
               return (
-              <div key={u.id} className={cn("relative flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 cursor-pointer transition-colors", chatMode === 'personal' && activeChat?.recipient.id === u.id && "bg-blue-500/30")} onClick={() => selectPersonalChat(u)}>
+              <div key={u.id} className={cn("relative flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 cursor-pointer transition-colors", 
+                chatMode === 'personal' && activeChat?.recipient.id === u.id 
+                  ? "bg-black text-white" 
+                  : "text-gray-300 hover:text-white"
+              )} onClick={() => selectPersonalChat(u)}>
                 <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0"><span className="text-sm font-semibold text-white">{u.name.charAt(0)}</span></div>
-                <div><p className="font-medium text-sm">{u.name}</p><p className="text-xs text-gray-400 capitalize">{u.role}</p></div>
+                <div>
+                  <p className="font-medium text-sm">{u.name}</p>
+                  <p className={cn("text-xs capitalize", 
+                    chatMode === 'personal' && activeChat?.recipient.id === u.id 
+                      ? "text-gray-300" 
+                      : "text-gray-400"
+                  )}>{u.role}</p>
+                </div>
                 {unreadChats[chatId] && <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-red-500 rounded-full"></span>}
               </div>
             )})}
