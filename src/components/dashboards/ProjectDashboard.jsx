@@ -12,6 +12,7 @@ import ProjectOverview from '@/components/project/ProjectOverview';
 import ProjectManagement from '@/components/project/ProjectManagement';
 import TaskManagement from '@/components/project/TaskManagement';
 import ProjectTransactions from '@/components/project/ProjectTransactions';
+import { Button } from '@/components/ui/button';
 
 const ProjectDashboard = () => {
   return (
@@ -36,22 +37,30 @@ const ProjectDashboard = () => {
         </motion.div>
 
         <div className="flex gap-4">
-            <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
-              <Briefcase className="w-4 h-4" />
+          <NavLink to="/dashboard/project" end>
+            <Button variant="outline">
+              <Briefcase className="w-4 h-4 mr-2" />
               Overview
-            </NavLink>
-            <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
-              <Target className="w-4 h-4" />
+            </Button>
+          </NavLink>
+          <NavLink to="/dashboard/project/management">
+            <Button variant="outline">
+              <Target className="w-4 h-4 mr-2" />
               Manajemen Proyek
-            </NavLink>
-            <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
-              <CheckSquare className="w-4 h-4" />
+            </Button>
+          </NavLink>
+          <NavLink to="/dashboard/project/tasks">
+            <Button variant="outline">
+              <CheckSquare className="w-4 h-4 mr-2" />
               Task Management
-            </NavLink>
-            <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
-              <TrendingUp className="w-4 h-4" />
+            </Button>
+          </NavLink>
+          <NavLink to="/dashboard/project/transactions">
+            <Button variant="outline">
+              <TrendingUp className="w-4 h-4 mr-2" />
               Transaksi Proyek
-            </NavLink>
+            </Button>
+          </NavLink>
         </div>
 
         <Routes>

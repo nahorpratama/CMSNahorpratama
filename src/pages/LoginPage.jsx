@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { LogIn, Building2 } from 'lucide-react';
@@ -22,9 +22,16 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   
   // Mengambil fungsi login dari AuthContext
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Redirect jika sudah login (mencegah perlu login dua kali)
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
 
   /**
    * Menangani proses submit form login.
