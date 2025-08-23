@@ -2,10 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,6 +13,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { useChat } from '@/contexts/ChatContext';
 
 const Header = ({ onToggleSidebar, sidebarOpen }) => {

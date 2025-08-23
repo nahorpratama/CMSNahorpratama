@@ -36,7 +36,7 @@ const navTextVariants = {
 };
 
 const Sidebar = ({ isOpen }) => {
-  const { user, hasPermission } = useAuth();
+  const { hasPermission } = useAuth();
   const location = useLocation();
 
   const menuItems = [
@@ -79,21 +79,6 @@ const Sidebar = ({ isOpen }) => {
             <h1 className="font-bold text-lg text-sidebar-foreground">CMS</h1>
             <p className="text-xs text-sidebar-foreground/60 whitespace-nowrap">Corporate Management</p>
           </motion.div>
-        </div>
-
-        {/* User Profile Section */}
-        <div className="p-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
-              <span className="text-sm font-semibold text-white">
-                {user?.name?.charAt(0) || 'A'}
-              </span>
-            </div>
-            <motion.div variants={logoTextVariants} className="overflow-hidden">
-              <p className="font-medium text-sm whitespace-nowrap text-sidebar-foreground">{user?.name || 'Admin'}</p>
-              <p className="text-xs text-sidebar-foreground/60 capitalize whitespace-nowrap">{user?.role || 'admin'}</p>
-            </motion.div>
-          </div>
         </div>
 
         {/* Navigation Menu */}
