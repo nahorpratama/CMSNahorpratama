@@ -17,7 +17,6 @@ import ProjectManagement from '@/components/project/ProjectManagement';
 import TaskManagement from '@/components/project/TaskManagement';
 import ProjectTransactions from '@/components/project/ProjectTransactions';
 import ProcurementManagement from '@/components/procurement/ProcurementManagement';
-import UserManagement from '@/components/admin/UserManagement';
 import { MetricCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -28,7 +27,7 @@ const ProjectDashboard = () => {
   const content = {
     id: {
       title: 'Project Dashboard',
-      subtitle: 'Overview proyek, task management, transaksi proyek, procurement, dan manajemen pengguna',
+      subtitle: 'Overview proyek, task management, transaksi proyek, dan procurement',
       metrics: {
         totalProjects: 'Total Proyek',
         activeProjects: 'Proyek Aktif',
@@ -46,15 +45,14 @@ const ProjectDashboard = () => {
         management: 'Manajemen Proyek',
         tasks: 'Task Management',
         transactions: 'Transaksi Proyek',
-        procurement: 'Procurement',
-        users: 'Manajemen Pengguna'
+        procurement: 'Procurement'
       },
       pageTitle: 'Project Dashboard - Corporate Management System',
-      pageDesc: 'Dashboard proyek untuk manajemen proyek, task, transaksi, procurement, dan pengguna'
+      pageDesc: 'Dashboard proyek untuk manajemen proyek, task, transaksi, dan procurement'
     },
     en: {
       title: 'Project Dashboard',
-      subtitle: 'Project overview, task management, project transactions, procurement, and user management',
+      subtitle: 'Project overview, task management, project transactions, and procurement',
       metrics: {
         totalProjects: 'Total Projects',
         activeProjects: 'Active Projects',
@@ -72,11 +70,10 @@ const ProjectDashboard = () => {
         management: 'Project Management',
         tasks: 'Task Management',
         transactions: 'Project Transactions',
-        procurement: 'Procurement',
-        users: 'User Management'
+        procurement: 'Procurement'
       },
       pageTitle: 'Project Dashboard - Corporate Management System',
-      pageDesc: 'Project dashboard for project management, tasks, transactions, procurement, and users'
+      pageDesc: 'Project dashboard for project management, tasks, transactions, and procurement'
     }
   };
 
@@ -165,10 +162,6 @@ const ProjectDashboard = () => {
             <ShoppingCart className="w-4 h-4" />
             {t.navigation.procurement}
           </NavLink>
-          <NavLink to="/dashboard/project/users" className={({ isActive }) => `glass-effect border-indigo-500/30 hover:bg-indigo-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-indigo-500/30' : ''}`}>
-            <Users className="w-4 h-4" />
-            {t.navigation.users}
-          </NavLink>
         </div>
 
         <Routes>
@@ -177,7 +170,6 @@ const ProjectDashboard = () => {
           <Route path="/tasks" element={<TaskManagement />} />
           <Route path="/transactions" element={<ProjectTransactions />} />
           <Route path="/procurement" element={<ProcurementManagement />} />
-          <Route path="/users" element={<UserManagement />} />
         </Routes>
       </div>
     </>

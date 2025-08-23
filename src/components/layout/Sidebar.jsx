@@ -15,7 +15,8 @@ import {
   CheckSquare,
   Target,
   TrendingUp,
-  Truck
+  Truck,
+  ShoppingCart
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -57,6 +58,7 @@ const Sidebar = ({ isOpen }) => {
         projectManagement: 'Manajemen Proyek',
         taskManagement: 'Task Management',
         projectTransactions: 'Transaksi Proyek',
+        procurementManagement: 'Manajemen Procurement',
         chat: 'Chat'
       }
     },
@@ -74,6 +76,7 @@ const Sidebar = ({ isOpen }) => {
         projectManagement: 'Project Management',
         taskManagement: 'Task Management',
         projectTransactions: 'Project Transactions',
+        procurementManagement: 'Procurement Management',
         chat: 'Chat'
       }
     }
@@ -164,6 +167,13 @@ const Sidebar = ({ isOpen }) => {
       icon: TrendingUp, 
       path: '/dashboard/project/transactions', 
       permission: 'project_transactions', 
+      roles: ['admin', 'project'] 
+    },
+    { 
+      title: t.menu.procurementManagement, 
+      icon: ShoppingCart, 
+      path: '/dashboard/procurement', 
+      permission: 'procurement_management', 
       roles: ['admin', 'project'] 
     },
     { 
