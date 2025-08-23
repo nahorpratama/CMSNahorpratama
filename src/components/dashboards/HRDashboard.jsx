@@ -20,75 +20,187 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HRDashboard = () => {
   const { toast } = useToast();
+  const { language } = useLanguage();
+
+  // Language-specific content
+  const content = {
+    id: {
+      title: 'HR Dashboard',
+      subtitle: 'Manajemen sumber daya manusia dan monitoring performa karyawan',
+      navigation: {
+        overview: 'Overview',
+        employees: 'Karyawan',
+        recruitment: 'Recruitment'
+      },
+      metrics: {
+        totalEmployees: 'Total Karyawan',
+        activeEmployees: 'Karyawan Aktif',
+        turnoverRate: 'Turnover Rate',
+        avgSalary: 'Rata-rata Gaji'
+      },
+      charts: {
+        departmentOverview: 'Overview Departemen',
+        recentActivities: 'Aktivitas Terbaru'
+      },
+      data: {
+        employeeList: 'Daftar Karyawan',
+        recruitmentStatus: 'Status Recruitment'
+      },
+      status: {
+        active: 'Aktif',
+        resigned: 'Resign',
+        open: 'Terbuka',
+        inProgress: 'Dalam Proses',
+        closed: 'Ditutup'
+      },
+      performance: {
+        excellent: 'Excellent',
+        good: 'Good',
+        average: 'Average',
+        poor: 'Poor'
+      },
+      priority: {
+        high: 'High Priority',
+        medium: 'Medium Priority',
+        low: 'Low Priority'
+      },
+      activities: {
+        newEmployee: 'Karyawan baru bergabung: Lisa Permata',
+        performanceReview: 'Performance review selesai untuk Q2 2024',
+        trainingProgram: 'Training program dijadwalkan untuk Juli',
+        timeAgo: {
+          days: 'hari yang lalu',
+          weeks: 'minggu yang lalu'
+        }
+      },
+      pageTitle: 'HR Dashboard - Corporate Management System',
+      pageDesc: 'Dashboard HR untuk manajemen karyawan, recruitment, dan performa'
+    },
+    en: {
+      title: 'HR Dashboard',
+      subtitle: 'Human resource management and employee performance monitoring',
+      navigation: {
+        overview: 'Overview',
+        employees: 'Employees',
+        recruitment: 'Recruitment'
+      },
+      metrics: {
+        totalEmployees: 'Total Employees',
+        activeEmployees: 'Active Employees',
+        turnoverRate: 'Turnover Rate',
+        avgSalary: 'Average Salary'
+      },
+      charts: {
+        departmentOverview: 'Department Overview',
+        recentActivities: 'Recent Activities'
+      },
+      data: {
+        employeeList: 'Employee List',
+        recruitmentStatus: 'Recruitment Status'
+      },
+      status: {
+        active: 'Active',
+        resigned: 'Resigned',
+        open: 'Open',
+        inProgress: 'In Progress',
+        closed: 'Closed'
+      },
+      performance: {
+        excellent: 'Excellent',
+        good: 'Good',
+        average: 'Average',
+        poor: 'Poor'
+      },
+      priority: {
+        high: 'High Priority',
+        medium: 'Medium Priority',
+        low: 'Low Priority'
+      },
+      activities: {
+        newEmployee: 'New employee joined: Lisa Permata',
+        performanceReview: 'Performance review completed for Q2 2024',
+        trainingProgram: 'Training program scheduled for July',
+        timeAgo: {
+          days: 'days ago',
+          weeks: 'weeks ago'
+        }
+      },
+      pageTitle: 'HR Dashboard - Corporate Management System',
+      pageDesc: 'HR dashboard for employee management, recruitment, and performance'
+    }
+  };
+
+  const t = content[language];
 
   const employees = [
     {
       id: 1,
       name: 'Ahmad Rizki',
-      position: 'Senior Developer',
+      position: language === 'id' ? 'Senior Developer' : 'Senior Developer',
       department: 'IT',
       status: 'active',
       joinDate: '2022-01-15',
       email: 'ahmad.rizki@company.com',
       phone: '+62 812-3456-7890',
-      location: 'Jakarta',
+      location: language === 'id' ? 'Jakarta' : 'Jakarta',
       salary: 15000000,
       performance: 'excellent'
     },
     {
       id: 2,
       name: 'Sari Dewi',
-      position: 'Marketing Manager',
+      position: language === 'id' ? 'Marketing Manager' : 'Marketing Manager',
       department: 'Marketing',
       status: 'active',
       joinDate: '2021-08-20',
       email: 'sari.dewi@company.com',
       phone: '+62 813-4567-8901',
-      location: 'Bandung',
+      location: language === 'id' ? 'Bandung' : 'Bandung',
       salary: 12000000,
       performance: 'good'
     },
     {
       id: 3,
       name: 'Budi Santoso',
-      position: 'Finance Analyst',
+      position: language === 'id' ? 'Finance Analyst' : 'Finance Analyst',
       department: 'Finance',
       status: 'resigned',
       joinDate: '2020-03-10',
       resignDate: '2024-05-30',
       email: 'budi.santoso@company.com',
       phone: '+62 814-5678-9012',
-      location: 'Surabaya',
+      location: language === 'id' ? 'Surabaya' : 'Surabaya',
       salary: 10000000,
       performance: 'good'
     },
     {
       id: 4,
       name: 'Lisa Permata',
-      position: 'UI/UX Designer',
+      position: language === 'id' ? 'UI/UX Designer' : 'UI/UX Designer',
       department: 'IT',
       status: 'active',
       joinDate: '2023-02-01',
       email: 'lisa.permata@company.com',
       phone: '+62 815-6789-0123',
-      location: 'Jakarta',
+      location: language === 'id' ? 'Jakarta' : 'Jakarta',
       salary: 11000000,
       performance: 'excellent'
     },
     {
       id: 5,
       name: 'Andi Wijaya',
-      position: 'HR Specialist',
+      position: language === 'id' ? 'HR Specialist' : 'HR Specialist',
       department: 'HR',
       status: 'resigned',
       joinDate: '2019-11-15',
       resignDate: '2024-04-15',
       email: 'andi.wijaya@company.com',
       phone: '+62 816-7890-1234',
-      location: 'Yogyakarta',
+      location: language === 'id' ? 'Yogyakarta' : 'Yogyakarta',
       salary: 9000000,
       performance: 'average'
     }
@@ -97,7 +209,7 @@ const HRDashboard = () => {
   const recruitmentData = [
     {
       id: 1,
-      position: 'Full Stack Developer',
+      position: language === 'id' ? 'Full Stack Developer' : 'Full Stack Developer',
       department: 'IT',
       status: 'open',
       applications: 12,
@@ -105,7 +217,7 @@ const HRDashboard = () => {
     },
     {
       id: 2,
-      position: 'Marketing Specialist',
+      position: language === 'id' ? 'Marketing Specialist' : 'Marketing Specialist',
       department: 'Marketing',
       status: 'in_progress',
       applications: 8,
@@ -113,7 +225,7 @@ const HRDashboard = () => {
     },
     {
       id: 3,
-      position: 'Finance Manager',
+      position: language === 'id' ? 'Finance Manager' : 'Finance Manager',
       department: 'Finance',
       status: 'closed',
       applications: 15,
@@ -123,30 +235,30 @@ const HRDashboard = () => {
 
   const metrics = [
     {
-      title: 'Total Karyawan',
+      title: t.metrics.totalEmployees,
       value: '248',
-      change: '+12% dari bulan lalu',
+      change: language === 'id' ? '+12% dari bulan lalu' : '+12% from last month',
       icon: Users,
       changeType: 'positive'
     },
     {
-      title: 'Karyawan Aktif',
+      title: t.metrics.activeEmployees,
       value: '235',
-      change: '+8% dari bulan lalu',
+      change: language === 'id' ? '+8% dari bulan lalu' : '+8% from last month',
       icon: UserCheck,
       changeType: 'positive'
     },
     {
-      title: 'Turnover Rate',
+      title: t.metrics.turnoverRate,
       value: '5.2%',
-      change: '-2.1% dari bulan lalu',
+      change: language === 'id' ? '-2.1% dari bulan lalu' : '-2.1% from last month',
       icon: UserX,
       changeType: 'positive'
     },
     {
-      title: 'Rata-rata Gaji',
+      title: t.metrics.avgSalary,
       value: 'Rp 12.5M',
-      change: '+15% dari bulan lalu',
+      change: language === 'id' ? '+15% dari bulan lalu' : '+15% from last month',
       icon: TrendingUp,
       changeType: 'positive'
     }
@@ -204,30 +316,30 @@ const HRDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>HR Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard HR untuk manajemen karyawan, recruitment, dan performa" />
+        <title>{t.pageTitle}</title>
+        <meta name="description" content={t.pageDesc} />
       </Helmet>
       
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">HR Dashboard</h1>
-          <p className="text-muted-foreground">Manajemen sumber daya manusia dan monitoring performa karyawan</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t.title}</h1>
+          <p className="text-muted-foreground">{t.subtitle}</p>
         </div>
 
         {/* Navigation Tabs */}
         <div className="flex gap-4">
           <NavLink to="/dashboard/hr" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Users className="w-4 h-4" />
-            Overview
+            {t.navigation.overview}
           </NavLink>
           <NavLink to="/dashboard/hr/employees" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
             <UserCheck className="w-4 h-4" />
-            Karyawan
+            {t.navigation.employees}
           </NavLink>
           <NavLink to="/dashboard/hr/recruitment" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
             <UserPlus className="w-4 h-4" />
-            Recruitment
+            {t.navigation.recruitment}
           </NavLink>
         </div>
 
@@ -251,7 +363,7 @@ const HRDashboard = () => {
 
               {/* Department Overview */}
               <ContentGrid cols={2}>
-                <ChartCard title="Overview Departemen" variant="elevated">
+                <ChartCard title={t.charts.departmentOverview} variant="elevated">
                   <div className="space-y-4">
                     {departmentStats.map((dept, index) => (
                       <div key={dept.name} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
@@ -259,12 +371,16 @@ const HRDashboard = () => {
                           <div className="w-3 h-3 rounded-full bg-primary"></div>
                           <div>
                             <p className="font-medium text-card-foreground">{dept.name}</p>
-                            <p className="text-sm text-muted-foreground">{dept.employees} karyawan</p>
+                            <p className="text-sm text-muted-foreground">
+                              {dept.employees} {language === 'id' ? 'karyawan' : 'employees'}
+                            </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-card-foreground">{formatCurrency(dept.avgSalary)}</p>
-                          <p className="text-sm text-muted-foreground">Turnover: {dept.turnover}%</p>
+                          <p className="text-sm text-muted-foreground">
+                            {language === 'id' ? 'Turnover' : 'Turnover'}: {dept.turnover}%
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -272,7 +388,7 @@ const HRDashboard = () => {
                 </ChartCard>
 
                 {/* Recent Activities */}
-                <DataCard title="Aktivitas Terbaru" variant="elevated">
+                <DataCard title={t.charts.recentActivities} variant="elevated">
                   <div className="space-y-4">
                     <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
                       <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600">
@@ -280,10 +396,10 @@ const HRDashboard = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-card-foreground mb-1">
-                          Karyawan baru bergabung: Lisa Permata
+                          {t.activities.newEmployee}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          2 hari yang lalu
+                          2 {t.activities.timeAgo.days}
                         </p>
                       </div>
                     </div>
@@ -293,10 +409,10 @@ const HRDashboard = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-card-foreground mb-1">
-                          Performance review selesai untuk Q2 2024
+                          {t.activities.performanceReview}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          1 minggu yang lalu
+                          1 {t.activities.timeAgo.weeks}
                         </p>
                       </div>
                     </div>
@@ -306,10 +422,10 @@ const HRDashboard = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-card-foreground mb-1">
-                          Training program dijadwalkan untuk Juli
+                          {t.activities.trainingProgram}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          2 minggu yang lalu
+                          2 {t.activities.timeAgo.weeks}
                         </p>
                       </div>
                     </div>
@@ -321,7 +437,7 @@ const HRDashboard = () => {
           
           <Route path="/employees" element={
             <div className="space-y-6">
-              <DataCard title="Daftar Karyawan" variant="elevated">
+              <DataCard title={t.data.employeeList} variant="elevated">
                 <div className="space-y-3">
                   {employees.map((employee) => (
                     <div key={employee.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
@@ -339,19 +455,17 @@ const HRDashboard = () => {
                             </span>
                             <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
-                              Bergabung: {new Date(employee.joinDate).toLocaleDateString('id-ID')}
+                              {language === 'id' ? 'Bergabung' : 'Joined'}: {new Date(employee.joinDate).toLocaleDateString('id-ID')}
                             </span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(employee.status)}`}>
-                          {employee.status === 'active' ? 'Aktif' : 'Resign'}
+                          {employee.status === 'active' ? t.status.active : t.status.resigned}
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getPerformanceColor(employee.performance)}`}>
-                          {employee.performance === 'excellent' ? 'Excellent' : 
-                           employee.performance === 'good' ? 'Good' : 
-                           employee.performance === 'average' ? 'Average' : 'Poor'}
+                          {t.performance[employee.performance]}
                         </span>
                         <div className="text-right">
                           <p className="font-semibold text-card-foreground">{formatCurrency(employee.salary)}</p>
@@ -367,7 +481,7 @@ const HRDashboard = () => {
           
           <Route path="/recruitment" element={
             <div className="space-y-6">
-              <DataCard title="Status Recruitment" variant="elevated">
+              <DataCard title={t.data.recruitmentStatus} variant="elevated">
                 <div className="space-y-3">
                   {recruitmentData.map((position) => (
                     <div key={position.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
@@ -379,22 +493,21 @@ const HRDashboard = () => {
                           <p className="font-medium text-card-foreground">{position.position}</p>
                           <p className="text-sm text-muted-foreground">{position.department}</p>
                           <p className="text-xs text-muted-foreground mt-1">
-                            {position.applications} aplikasi diterima
+                            {position.applications} {language === 'id' ? 'aplikasi diterima' : 'applications received'}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(position.status)}`}>
-                          {position.status === 'open' ? 'Terbuka' : 
-                           position.status === 'in_progress' ? 'Dalam Proses' : 'Ditutup'}
+                          {position.status === 'open' ? t.status.open : 
+                           position.status === 'in_progress' ? t.status.inProgress : t.status.closed}
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
                           position.priority === 'high' ? 'text-red-600 bg-red-500/10 border-red-500/20' :
                           position.priority === 'medium' ? 'text-amber-600 bg-amber-500/10 border-amber-500/20' :
                           'text-blue-600 bg-blue-500/10 border-blue-500/20'
                         }`}>
-                          {position.priority === 'high' ? 'High Priority' : 
-                           position.priority === 'medium' ? 'Medium Priority' : 'Low Priority'}
+                          {t.priority[position.priority.replace(' ', '').toLowerCase()]}
                         </span>
                       </div>
                     </div>

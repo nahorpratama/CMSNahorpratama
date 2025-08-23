@@ -17,10 +17,92 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useToast } from '@/components/ui/use-toast';
 import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FinanceDashboard = () => {
   const { toast } = useToast();
+  const { language } = useLanguage();
   const [selectedQuarter, setSelectedQuarter] = useState('Q2 2024');
+
+  // Language-specific content
+  const content = {
+    id: {
+      title: 'Finance Dashboard',
+      subtitle: 'Monitoring keuangan perusahaan dan analisis performa finansial',
+      navigation: {
+        overview: 'Overview',
+        reports: 'Laporan',
+        transactions: 'Transaksi'
+      },
+      metrics: {
+        totalRevenue: 'Total Revenue',
+        totalExpenses: 'Total Expenses',
+        netProfit: 'Net Profit',
+        cashFlow: 'Cash Flow'
+      },
+      charts: {
+        revenueVsExpenses: 'Revenue vs Expenses',
+        quarterlyPerformance: 'Performa Kuartalan'
+      },
+      data: {
+        recentTransactions: 'Transaksi Terbaru',
+        allTransactions: 'Semua Transaksi',
+        financialReports: 'Laporan Keuangan'
+      },
+      status: {
+        completed: 'completed',
+        pending: 'pending',
+        cancelled: 'cancelled'
+      },
+      categories: {
+        projectRevenue: 'Project Revenue',
+        payroll: 'Payroll',
+        operations: 'Operations',
+        technology: 'Technology'
+      },
+      pageTitle: 'Finance Dashboard - Corporate Management System',
+      pageDesc: 'Dashboard keuangan untuk monitoring revenue, expenses, dan cash flow'
+    },
+    en: {
+      title: 'Finance Dashboard',
+      subtitle: 'Company financial monitoring and financial performance analysis',
+      navigation: {
+        overview: 'Overview',
+        reports: 'Reports',
+        transactions: 'Transactions'
+      },
+      metrics: {
+        totalRevenue: 'Total Revenue',
+        totalExpenses: 'Total Expenses',
+        netProfit: 'Net Profit',
+        cashFlow: 'Cash Flow'
+      },
+      charts: {
+        revenueVsExpenses: 'Revenue vs Expenses',
+        quarterlyPerformance: 'Quarterly Performance'
+      },
+      data: {
+        recentTransactions: 'Recent Transactions',
+        allTransactions: 'All Transactions',
+        financialReports: 'Financial Reports'
+      },
+      status: {
+        completed: 'completed',
+        pending: 'pending',
+        cancelled: 'cancelled'
+      },
+      categories: {
+        projectRevenue: 'Project Revenue',
+        payroll: 'Payroll',
+        operations: 'Operations',
+        technology: 'Technology'
+      },
+      pageTitle: 'Finance Dashboard - Corporate Management System',
+      pageDesc: 'Finance dashboard for monitoring revenue, expenses, and cash flow'
+    }
+  };
+
+  const t = content[language];
 
   const quarterlyData = [
     { quarter: 'Q1 2023', revenue: 1800000, expenses: 1200000, profit: 600000 },
@@ -44,74 +126,74 @@ const FinanceDashboard = () => {
     {
       id: 1,
       type: 'income',
-      description: 'Pembayaran Proyek Website E-commerce',
+      description: language === 'id' ? 'Pembayaran Proyek Website E-commerce' : 'E-commerce Website Project Payment',
       amount: 450000000,
       date: '2024-06-15',
-      status: 'completed',
-      category: 'Project Revenue'
+      status: t.status.completed,
+      category: t.categories.projectRevenue
     },
     {
       id: 2,
       type: 'expense',
-      description: 'Gaji Karyawan Bulan Juni',
+      description: language === 'id' ? 'Gaji Karyawan Bulan Juni' : 'June Employee Salaries',
       amount: 280000000,
       date: '2024-06-01',
-      status: 'completed',
-      category: 'Payroll'
+      status: t.status.completed,
+      category: t.categories.payroll
     },
     {
       id: 3,
       type: 'income',
-      description: 'Pembayaran Proyek Mobile App',
+      description: language === 'id' ? 'Pembayaran Proyek Mobile App' : 'Mobile App Project Payment',
       amount: 320000000,
       date: '2024-06-10',
-      status: 'pending',
-      category: 'Project Revenue'
+      status: t.status.pending,
+      category: t.categories.projectRevenue
     },
     {
       id: 4,
       type: 'expense',
-      description: 'Biaya Operasional Kantor',
+      description: language === 'id' ? 'Biaya Operasional Kantor' : 'Office Operational Costs',
       amount: 85000000,
       date: '2024-06-05',
-      status: 'completed',
-      category: 'Operations'
+      status: t.status.completed,
+      category: t.categories.operations
     },
     {
       id: 5,
       type: 'expense',
-      description: 'Pembelian Software License',
+      description: language === 'id' ? 'Pembelian Software License' : 'Software License Purchase',
       amount: 45000000,
       date: '2024-06-12',
-      status: 'pending',
-      category: 'Technology'
+      status: t.status.pending,
+      category: t.categories.technology
     }
   ];
 
   const metrics = [
     {
-      title: 'Total Revenue',
+      title: t.metrics.totalRevenue,
       value: 'Rp 2.6M',
       change: '+18.2%',
       icon: TrendingUp,
       changeType: 'positive'
     },
     {
-      title: 'Total Expenses',
+      title: t.metrics.totalExpenses,
       value: 'Rp 1.7M',
       change: '+12.5%',
       icon: TrendingDown,
       changeType: 'negative'
     },
     {
-      title: 'Net Profit',
+      title: t.metrics.netProfit,
       value: 'Rp 900K',
       change: '+25.8%',
       icon: DollarSign,
       changeType: 'positive'
     },
     {
-      title: 'Cash Flow',
+      title: t.metrics.cashFlow,
       value: 'Rp 1.2M',
       change: '+15.3%',
       icon: CreditCard,
@@ -150,30 +232,30 @@ const FinanceDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Finance Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard keuangan untuk monitoring revenue, expenses, dan cash flow" />
+        <title>{t.pageTitle}</title>
+        <meta name="description" content={t.pageDesc} />
       </Helmet>
       
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Finance Dashboard</h1>
-          <p className="text-muted-foreground">Monitoring keuangan perusahaan dan analisis performa finansial</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t.title}</h1>
+          <p className="text-muted-foreground">{t.subtitle}</p>
         </div>
 
         {/* Navigation Tabs */}
         <div className="flex gap-4">
           <NavLink to="/dashboard/finance" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <DollarSign className="w-4 h-4" />
-            Overview
+            {t.navigation.overview}
           </NavLink>
           <NavLink to="/dashboard/finance/reports" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
             <FileText className="w-4 h-4" />
-            Laporan
+            {t.navigation.reports}
           </NavLink>
           <NavLink to="/dashboard/finance/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
             <CreditCard className="w-4 h-4" />
-            Transaksi
+            {t.navigation.transactions}
           </NavLink>
         </div>
 
@@ -198,7 +280,7 @@ const FinanceDashboard = () => {
               {/* Charts Section */}
               <ContentGrid cols={2}>
                 {/* Revenue vs Expenses Chart */}
-                <ChartCard title="Revenue vs Expenses" variant="elevated">
+                <ChartCard title={t.charts.revenueVsExpenses} variant="elevated">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={monthlyData}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -237,7 +319,7 @@ const FinanceDashboard = () => {
                 </ChartCard>
 
                 {/* Quarterly Performance */}
-                <ChartCard title="Performa Kuartalan" variant="elevated">
+                <ChartCard title={t.charts.quarterlyPerformance} variant="elevated">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={quarterlyData}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -273,7 +355,7 @@ const FinanceDashboard = () => {
               </ContentGrid>
 
               {/* Recent Transactions */}
-              <DataCard title="Transaksi Terbaru" variant="elevated">
+              <DataCard title={t.data.recentTransactions} variant="elevated">
                 <div className="space-y-3">
                   {transactions.slice(0, 5).map((transaction) => (
                     <div key={transaction.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
@@ -305,15 +387,17 @@ const FinanceDashboard = () => {
           
           <Route path="/reports" element={
             <div className="space-y-6">
-              <DataCard title="Laporan Keuangan" variant="elevated">
-                <p className="text-muted-foreground">Laporan keuangan akan ditampilkan di sini...</p>
+              <DataCard title={t.data.financialReports} variant="elevated">
+                <p className="text-muted-foreground">
+                  {language === 'id' ? 'Laporan keuangan akan ditampilkan di sini...' : 'Financial reports will be displayed here...'}
+                </p>
               </DataCard>
             </div>
           } />
           
           <Route path="/transactions" element={
             <div className="space-y-6">
-              <DataCard title="Semua Transaksi" variant="elevated">
+              <DataCard title={t.data.allTransactions} variant="elevated">
                 <div className="space-y-3">
                   {transactions.map((transaction) => (
                     <div key={transaction.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">

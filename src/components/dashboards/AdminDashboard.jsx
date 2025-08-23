@@ -13,35 +13,120 @@ import {
 } from 'lucide-react';
 import { MetricCard, ChartCard, StatsGrid } from '@/components/ui/dashboard-card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminDashboard = () => {
+  const { language } = useLanguage();
+
+  // Language-specific content
+  const content = {
+    id: {
+      title: 'Admin Dashboard',
+      subtitle: 'Selamat datang kembali! Berikut ringkasan sistem Anda hari ini.',
+      metrics: {
+        totalEmployees: 'Total Karyawan',
+        revenue: 'Revenue Bulan Ini',
+        activeProjects: 'Proyek Aktif',
+        growth: 'Pertumbuhan'
+      },
+      changes: {
+        employees: '+12% dari bulan lalu',
+        revenue: '+8% dari bulan lalu',
+        projects: '+3 proyek baru',
+        growth: '+2.1% dari target'
+      },
+      charts: {
+        revenueVsTarget: 'Revenue vs Target',
+        departmentOverview: 'Overview Departemen',
+        projectStatus: 'Status Proyek',
+        recentActivities: 'Aktivitas Terbaru'
+      },
+      projectStatus: {
+        completed: 'Selesai',
+        ongoing: 'Berlangsung',
+        pending: 'Tertunda',
+        cancelled: 'Dibatalkan'
+      },
+      activities: {
+        userJoined: 'bergabung sebagai Developer',
+        projectStarted: 'dimulai',
+        maintenance: 'dijadwalkan',
+        timeAgo: {
+          hours: 'jam yang lalu',
+          weeks: 'minggu yang lalu'
+        }
+      },
+      pageTitle: 'Admin Dashboard - Corporate Management System'
+    },
+    en: {
+      title: 'Admin Dashboard',
+      subtitle: 'Welcome back! Here\'s a summary of your system today.',
+      metrics: {
+        totalEmployees: 'Total Employees',
+        revenue: 'Monthly Revenue',
+        activeProjects: 'Active Projects',
+        growth: 'Growth'
+      },
+      changes: {
+        employees: '+12% from last month',
+        revenue: '+8% from last month',
+        projects: '+3 new projects',
+        growth: '+2.1% from target'
+      },
+      charts: {
+        revenueVsTarget: 'Revenue vs Target',
+        departmentOverview: 'Department Overview',
+        projectStatus: 'Project Status',
+        recentActivities: 'Recent Activities'
+      },
+      projectStatus: {
+        completed: 'Completed',
+        ongoing: 'Ongoing',
+        pending: 'Pending',
+        cancelled: 'Cancelled'
+      },
+      activities: {
+        userJoined: 'joined as Developer',
+        projectStarted: 'started',
+        maintenance: 'scheduled',
+        timeAgo: {
+          hours: 'hours ago',
+          weeks: 'weeks ago'
+        }
+      },
+      pageTitle: 'Admin Dashboard - Corporate Management System'
+    }
+  };
+
+  const t = content[language];
+
   // Mock data untuk dashboard admin
   const metrics = [
     {
-      title: 'Total Karyawan',
+      title: t.metrics.totalEmployees,
       value: '248',
-      change: '+12% dari bulan lalu',
+      change: t.changes.employees,
       changeType: 'positive',
       icon: Users,
     },
     {
-      title: 'Revenue Bulan Ini',
+      title: t.metrics.revenue,
       value: 'Rp 2.4M',
-      change: '+8% dari bulan lalu',
+      change: t.changes.revenue,
       changeType: 'positive',
       icon: DollarSign,
     },
     {
-      title: 'Proyek Aktif',
+      title: t.metrics.activeProjects,
       value: '12',
-      change: '+3 proyek baru',
+      change: t.changes.projects,
       changeType: 'positive',
       icon: Briefcase,
     },
     {
-      title: 'Pertumbuhan',
+      title: t.metrics.growth,
       value: '23.5%',
-      change: '+2.1% dari target',
+      change: t.changes.growth,
       changeType: 'positive',
       icon: TrendingUp,
     }
@@ -68,10 +153,10 @@ const AdminDashboard = () => {
 
   // Data untuk status proyek pie chart
   const projectStatusData = [
-    { name: 'Selesai', value: 8, color: '#10b981' },
-    { name: 'Berlangsung', value: 12, color: '#3b82f6' },
-    { name: 'Tertunda', value: 3, color: '#f59e0b' },
-    { name: 'Dibatalkan', value: 2, color: '#ef4444' }
+    { name: t.projectStatus.completed, value: 8, color: '#10b981' },
+    { name: t.projectStatus.ongoing, value: 12, color: '#3b82f6' },
+    { name: t.projectStatus.pending, value: 3, color: '#f59e0b' },
+    { name: t.projectStatus.cancelled, value: 2, color: '#ef4444' }
   ];
 
   // Recent activities
@@ -79,24 +164,24 @@ const AdminDashboard = () => {
     {
       id: 1,
       type: 'user',
-      message: 'John Doe bergabung sebagai Developer',
-      time: '2 jam yang lalu',
+      message: `John Doe ${t.activities.userJoined}`,
+      time: `2 ${t.activities.timeAgo.hours}`,
       icon: Users,
       color: 'text-blue-500'
     },
     {
       id: 2,
       type: 'project',
-      message: 'Proyek Website E-commerce dimulai',
-      time: '4 jam yang lalu',
+      message: `Proyek Website E-commerce ${t.activities.projectStarted}`,
+      time: `4 ${t.activities.timeAgo.hours}`,
       icon: Briefcase,
       color: 'text-green-500'
     },
     {
       id: 3,
       type: 'alert',
-      message: 'Server maintenance dijadwalkan',
-      time: '6 jam yang lalu',
+      message: `Server maintenance ${t.activities.maintenance}`,
+      time: `6 ${t.activities.timeAgo.hours}`,
       icon: AlertCircle,
       color: 'text-amber-500'
     }
@@ -105,13 +190,13 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       <Helmet>
-        <title>Admin Dashboard - Corporate Management System</title>
+        <title>{t.pageTitle}</title>
       </Helmet>
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Admin Dashboard</h1>
-        <p className="text-muted-foreground">Selamat datang kembali! Berikut ringkasan sistem Anda hari ini.</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">{t.title}</h1>
+        <p className="text-muted-foreground">{t.subtitle}</p>
       </div>
 
       {/* Metrics Cards */}
@@ -131,7 +216,7 @@ const AdminDashboard = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Chart */}
-        <ChartCard title="Revenue vs Target">
+        <ChartCard title={t.charts.revenueVsTarget}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={revenueData}>
               <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -171,7 +256,7 @@ const AdminDashboard = () => {
         </ChartCard>
 
         {/* Department Overview */}
-        <ChartCard title="Overview Departemen">
+        <ChartCard title={t.charts.departmentOverview}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={departmentData}>
               <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -204,7 +289,7 @@ const AdminDashboard = () => {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Project Status */}
-        <ChartCard title="Status Proyek" className="lg:col-span-1">
+        <ChartCard title={t.charts.projectStatus} className="lg:col-span-1">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -244,7 +329,7 @@ const AdminDashboard = () => {
 
         {/* Recent Activities */}
         <div className="lg:col-span-2">
-          <MetricCard title="Aktivitas Terbaru" className="h-full">
+          <MetricCard title={t.charts.recentActivities} className="h-full">
             <div className="space-y-4">
               {recentActivities.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">

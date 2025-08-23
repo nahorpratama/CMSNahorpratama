@@ -19,35 +19,96 @@ import ProjectTransactions from '@/components/project/ProjectTransactions';
 import ProcurementManagement from '@/components/procurement/ProcurementManagement';
 import UserManagement from '@/components/admin/UserManagement';
 import { MetricCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ProjectDashboard = () => {
+  const { language } = useLanguage();
+
+  // Language-specific content
+  const content = {
+    id: {
+      title: 'Project Dashboard',
+      subtitle: 'Overview proyek, task management, transaksi proyek, procurement, dan manajemen pengguna',
+      metrics: {
+        totalProjects: 'Total Proyek',
+        activeProjects: 'Proyek Aktif',
+        completedTasks: 'Task Selesai',
+        projectRevenue: 'Revenue Proyek'
+      },
+      changes: {
+        totalProjects: '+3 proyek baru',
+        activeProjects: '+2 dari bulan lalu',
+        completedTasks: '+23 dari minggu lalu',
+        projectRevenue: '+18% dari bulan lalu'
+      },
+      navigation: {
+        overview: 'Overview',
+        management: 'Manajemen Proyek',
+        tasks: 'Task Management',
+        transactions: 'Transaksi Proyek',
+        procurement: 'Procurement',
+        users: 'Manajemen Pengguna'
+      },
+      pageTitle: 'Project Dashboard - Corporate Management System',
+      pageDesc: 'Dashboard proyek untuk manajemen proyek, task, transaksi, procurement, dan pengguna'
+    },
+    en: {
+      title: 'Project Dashboard',
+      subtitle: 'Project overview, task management, project transactions, procurement, and user management',
+      metrics: {
+        totalProjects: 'Total Projects',
+        activeProjects: 'Active Projects',
+        completedTasks: 'Completed Tasks',
+        projectRevenue: 'Project Revenue'
+      },
+      changes: {
+        totalProjects: '+3 new projects',
+        activeProjects: '+2 from last month',
+        completedTasks: '+23 from last week',
+        projectRevenue: '+18% from last month'
+      },
+      navigation: {
+        overview: 'Overview',
+        management: 'Project Management',
+        tasks: 'Task Management',
+        transactions: 'Project Transactions',
+        procurement: 'Procurement',
+        users: 'User Management'
+      },
+      pageTitle: 'Project Dashboard - Corporate Management System',
+      pageDesc: 'Project dashboard for project management, tasks, transactions, procurement, and users'
+    }
+  };
+
+  const t = content[language];
+
   // Mock data untuk metrics
   const projectMetrics = [
     {
-      title: 'Total Proyek',
+      title: t.metrics.totalProjects,
       value: '24',
-      change: '+3 proyek baru',
+      change: t.changes.totalProjects,
       icon: Briefcase,
       changeType: 'positive'
     },
     {
-      title: 'Proyek Aktif',
+      title: t.metrics.activeProjects,
       value: '18',
-      change: '+2 dari bulan lalu',
+      change: t.changes.activeProjects,
       icon: Target,
       changeType: 'positive'
     },
     {
-      title: 'Task Selesai',
+      title: t.metrics.completedTasks,
       value: '156',
-      change: '+23 dari minggu lalu',
+      change: t.changes.completedTasks,
       icon: CheckSquare,
       changeType: 'positive'
     },
     {
-      title: 'Revenue Proyek',
+      title: t.metrics.projectRevenue,
       value: 'Rp 3.2M',
-      change: '+18% dari bulan lalu',
+      change: t.changes.projectRevenue,
       icon: DollarSign,
       changeType: 'positive'
     }
@@ -56,15 +117,15 @@ const ProjectDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Project Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard proyek untuk manajemen proyek, task, transaksi, procurement, dan pengguna" />
+        <title>{t.pageTitle}</title>
+        <meta name="description" content={t.pageDesc} />
       </Helmet>
       
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Project Dashboard</h1>
-          <p className="text-muted-foreground">Overview proyek, task management, transaksi proyek, procurement, dan manajemen pengguna</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t.title}</h1>
+          <p className="text-muted-foreground">{t.subtitle}</p>
         </div>
 
         {/* Metrics Cards */}
@@ -86,27 +147,27 @@ const ProjectDashboard = () => {
         <div className="flex gap-4 flex-wrap">
           <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Briefcase className="w-4 h-4" />
-            Overview
+            {t.navigation.overview}
           </NavLink>
           <NavLink to="/dashboard/project/management" className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Target className="w-4 h-4" />
-            Manajemen Proyek
+            {t.navigation.management}
           </NavLink>
           <NavLink to="/dashboard/project/tasks" className={({ isActive }) => `glass-effect border-green-500/30 hover:bg-green-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-green-500/30' : ''}`}>
             <CheckSquare className="w-4 h-4" />
-            Task Management
+            {t.navigation.tasks}
           </NavLink>
           <NavLink to="/dashboard/project/transactions" className={({ isActive }) => `glass-effect border-purple-500/30 hover:bg-purple-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-purple-500/30' : ''}`}>
             <TrendingUp className="w-4 h-4" />
-            Transaksi Proyek
+            {t.navigation.transactions}
           </NavLink>
           <NavLink to="/dashboard/project/procurement" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-amber-500/30' : ''}`}>
             <ShoppingCart className="w-4 h-4" />
-            Procurement
+            {t.navigation.procurement}
           </NavLink>
           <NavLink to="/dashboard/project/users" className={({ isActive }) => `glass-effect border-indigo-500/30 hover:bg-indigo-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-indigo-500/30' : ''}`}>
             <Users className="w-4 h-4" />
-            Manajemen Pengguna
+            {t.navigation.users}
           </NavLink>
         </div>
 
