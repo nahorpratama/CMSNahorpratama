@@ -49,7 +49,6 @@ const Sidebar = ({ isOpen }) => {
     { title: 'Data Karyawan', icon: Users, path: '/dashboard/hr/employees', permission: 'hr_management', roles: ['admin', 'hr'] },
     { title: 'Rekrutmen', icon: UserPlus, path: '/dashboard/hr/recruitment', permission: 'recruitment', roles: ['admin', 'hr'] },
     { title: 'Dashboard Proyek', icon: Briefcase, path: '/dashboard/project', permission: 'project_management', roles: ['admin', 'project'] },
-    { title: 'Manajemen Procurement', icon: Truck, path: '/dashboard/procurement', permission: 'procurement_management', roles: ['admin', 'project'] },
     { title: 'Manajemen Proyek', icon: Target, path: '/dashboard/project/management', permission: 'project_management', roles: ['admin', 'project'] },
     { title: 'Task Management', icon: CheckSquare, path: '/dashboard/project/tasks', permission: 'tasks', roles: ['admin', 'project'] },
     { title: 'Transaksi Proyek', icon: TrendingUp, path: '/dashboard/project/transactions', permission: 'project_transactions', roles: ['admin', 'project'] },

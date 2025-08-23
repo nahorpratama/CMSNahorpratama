@@ -6,30 +6,84 @@ import {
   Briefcase, 
   Target, 
   CheckSquare, 
-  TrendingUp
+  TrendingUp,
+  ShoppingCart,
+  Users,
+  DollarSign,
+  Calendar
 } from 'lucide-react';
 import ProjectOverview from '@/components/project/ProjectOverview';
 import ProjectManagement from '@/components/project/ProjectManagement';
 import TaskManagement from '@/components/project/TaskManagement';
 import ProjectTransactions from '@/components/project/ProjectTransactions';
+import ProcurementManagement from '@/components/procurement/ProcurementManagement';
+import UserManagement from '@/components/admin/UserManagement';
+import { MetricCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 
 const ProjectDashboard = () => {
+  // Mock data untuk metrics
+  const projectMetrics = [
+    {
+      title: 'Total Proyek',
+      value: '24',
+      change: '+3 proyek baru',
+      icon: Briefcase,
+      changeType: 'positive'
+    },
+    {
+      title: 'Proyek Aktif',
+      value: '18',
+      change: '+2 dari bulan lalu',
+      icon: Target,
+      changeType: 'positive'
+    },
+    {
+      title: 'Task Selesai',
+      value: '156',
+      change: '+23 dari minggu lalu',
+      icon: CheckSquare,
+      changeType: 'positive'
+    },
+    {
+      title: 'Revenue Proyek',
+      value: 'Rp 3.2M',
+      change: '+18% dari bulan lalu',
+      icon: DollarSign,
+      changeType: 'positive'
+    }
+  ];
+
   return (
     <>
       <Helmet>
         <title>Project Dashboard - Corporate Management System</title>
-        <meta name="description" content="Dashboard proyek untuk manajemen proyek, task, dan transaksi proyek" />
+        <meta name="description" content="Dashboard proyek untuk manajemen proyek, task, transaksi, procurement, dan pengguna" />
       </Helmet>
       
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Project Dashboard</h1>
-          <p className="text-muted-foreground">Overview proyek, task management, dan transaksi proyek</p>
+          <p className="text-muted-foreground">Overview proyek, task management, transaksi proyek, procurement, dan manajemen pengguna</p>
         </div>
 
+        {/* Metrics Cards */}
+        <StatsGrid>
+          {projectMetrics.map((metric, index) => (
+            <MetricCard
+              key={index}
+              title={metric.title}
+              value={metric.value}
+              change={metric.change}
+              changeType={metric.changeType}
+              icon={metric.icon}
+              variant="elevated"
+            />
+          ))}
+        </StatsGrid>
+
         {/* Navigation Tabs */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <NavLink to="/dashboard/project" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <Briefcase className="w-4 h-4" />
             Overview
@@ -46,6 +100,14 @@ const ProjectDashboard = () => {
             <TrendingUp className="w-4 h-4" />
             Transaksi Proyek
           </NavLink>
+          <NavLink to="/dashboard/project/procurement" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-amber-500/30' : ''}`}>
+            <ShoppingCart className="w-4 h-4" />
+            Procurement
+          </NavLink>
+          <NavLink to="/dashboard/project/users" className={({ isActive }) => `glass-effect border-indigo-500/30 hover:bg-indigo-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-indigo-500/30' : ''}`}>
+            <Users className="w-4 h-4" />
+            Manajemen Pengguna
+          </NavLink>
         </div>
 
         <Routes>
@@ -53,6 +115,8 @@ const ProjectDashboard = () => {
           <Route path="/management" element={<ProjectManagement />} />
           <Route path="/tasks" element={<TaskManagement />} />
           <Route path="/transactions" element={<ProjectTransactions />} />
+          <Route path="/procurement" element={<ProcurementManagement />} />
+          <Route path="/users" element={<UserManagement />} />
         </Routes>
       </div>
     </>
