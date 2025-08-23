@@ -9,10 +9,6 @@ import {
   Filter, 
   Edit, 
   Trash2,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
   Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,9 +36,7 @@ const UserManagement = () => {
     username: '',
     email: '',
     password: '',
-    role: 'project',
-    phone: '',
-    address: ''
+    role: 'project'
   });
 
   // Language-specific content
@@ -77,8 +71,6 @@ const UserManagement = () => {
         email: 'Email',
         password: 'Password',
         role: 'Role',
-        phone: 'Nomor Telepon',
-        address: 'Alamat',
         save: 'Simpan',
         cancel: 'Batal',
         edit: 'Edit Pengguna',
@@ -125,8 +117,6 @@ const UserManagement = () => {
         email: 'Email',
         password: 'Password',
         role: 'Role',
-        phone: 'Phone Number',
-        address: 'Address',
         save: 'Save',
         cancel: 'Cancel',
         edit: 'Edit User',
@@ -235,22 +225,7 @@ const UserManagement = () => {
       username: '',
       email: '',
       password: '',
-      role: 'project',
-      phone: '',
-      address: ''
-    });
-  };
-
-  const openEditDialog = (user) => {
-    setEditingUser(user);
-    setFormData({
-      name: user.name || '',
-      username: user.username || '',
-      email: user.email || '',
-      password: '',
-      role: user.role || 'project',
-      phone: user.phone || '',
-      address: user.address || ''
+      role: 'project'
     });
   };
 
@@ -415,7 +390,7 @@ const UserManagement = () => {
                       {getRoleLabel(user.role)}
                     </span>
                     <div className="flex gap-2">
-                      <EditUserDialog user={user} onSave={handleUpdateUser} />
+                      <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-500 hover:bg-red-500/10">
@@ -466,7 +441,7 @@ const UserManagement = () => {
               <div>
                 <Label htmlFor="username">{t.form.username}</Label>
                 <Input
-                  id="username"
+                  id="name"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 />
@@ -553,7 +528,7 @@ const UserManagement = () => {
                   <Input
                     id="edit-password"
                     type="password"
-                    placeholder="Kosongkan jika tidak ingin mengubah password"
+                    placeholder={language === 'id' ? "Kosongkan jika tidak ingin mengubah password" : "Leave empty if you don't want to change password"}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
@@ -590,19 +565,14 @@ const UserManagement = () => {
 };
 
 // Edit User Dialog Component
-const EditUserDialog = ({ user, onSave }) => {
-  const { language } = useLanguage();
+const EditUserDialog = ({ user, onSave, t }) => {
   const [formData, setFormData] = useState({
     name: user.name || '',
     username: user.username || '',
     email: user.email || '',
     password: '',
-    role: user.role || 'project',
-    phone: user.phone || '',
-    address: user.address || ''
+    role: user.role || 'project'
   });
-
-  const t = content[language];
 
   const handleSubmit = () => {
     onSave(formData);
@@ -650,7 +620,7 @@ const EditUserDialog = ({ user, onSave }) => {
             <Input
               id={`edit-${user.id}-password`}
               type="password"
-              placeholder={language === 'id' ? "Kosongkan jika tidak ingin mengubah password" : "Leave empty if you don't want to change password"}
+              placeholder={t.form.password}
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
