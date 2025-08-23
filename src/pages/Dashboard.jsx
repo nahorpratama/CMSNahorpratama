@@ -55,20 +55,20 @@ const Dashboard = () => {
           >
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
-                <Route path="/admin" element={
+                <Route path="admin" element={
                   hasPermission('all') || user?.role === 'admin' ? 
                   <AdminDashboard /> : <Navigate to={getDefaultRoute()} />
                 } />
-                <Route path="/users" element={
+                <Route path="users" element={
                   hasPermission('user_management') ? 
                   <UserManagement /> : <Navigate to={getDefaultRoute()} />
                 } />
-                <Route path="/finance/*" element={<FinanceDashboard />} />
-                <Route path="/hr/*" element={<HRDashboard />} />
-                <Route path="/project/*" element={<ProjectDashboard />} />
-                <Route path="/procurement" element={<ProcurementManagement />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/" element={<Navigate to={getDefaultRoute()} replace />} />
+                <Route path="finance/*" element={<FinanceDashboard />} />
+                <Route path="hr/*" element={<HRDashboard />} />
+                <Route path="project/*" element={<ProjectDashboard />} />
+                <Route path="procurement" element={<ProcurementManagement />} />
+                <Route path="chat" element={<ChatPage />} />
+                <Route index element={<Navigate to={getDefaultRoute()} replace />} />
               </Routes>
             </Suspense>
           </motion.div>
