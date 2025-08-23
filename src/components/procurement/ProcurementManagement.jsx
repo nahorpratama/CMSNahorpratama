@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import * as XLSX from 'xlsx';
 import { useDatabase } from '@/contexts/DatabaseContext';
 import { useToast } from '@/components/ui/use-toast';

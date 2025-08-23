@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Paperclip, FileText, FileImage as ImageIcon, Film, Music, Archive, File as FileIcon, Loader2, Users, PlusCircle, MessageSquare, Trash2, Search } from 'lucide-react';
 import { useChat } from '@/contexts/ChatContext';

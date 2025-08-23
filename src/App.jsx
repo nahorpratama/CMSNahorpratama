@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ChatProvider } from '@/contexts/ChatContext';
@@ -31,6 +31,7 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
+    <HelmetProvider>
     <Router>
       <Helmet>
         <title>Corporate Management System</title>
@@ -62,6 +63,7 @@ function App() {
         </DatabaseProvider>
       </ThemeProvider>
     </Router>
+    </HelmetProvider>
   );
 }
 
