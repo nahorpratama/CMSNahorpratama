@@ -43,7 +43,7 @@ function App() {
               <div className="min-h-screen bg-background text-foreground theme-transition">
                 <Suspense fallback={<LoadingSpinner />}>
                   <Routes>
-                    <Route path="/login" element={<AuthenticatedApp />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route
                       path="/dashboard/*"
                       element={

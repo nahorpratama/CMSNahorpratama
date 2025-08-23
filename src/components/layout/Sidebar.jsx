@@ -36,7 +36,7 @@ const navTextVariants = {
 };
 
 const Sidebar = ({ isOpen }) => {
-  const { hasPermission } = useAuth();
+  const { user, hasPermission } = useAuth();
   const location = useLocation();
 
   const menuItems = [
