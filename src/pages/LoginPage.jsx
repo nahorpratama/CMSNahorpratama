@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { LogIn, Building2 } from 'lucide-react';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Komponen untuk halaman Login.
@@ -21,8 +22,33 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   
   // Mengambil fungsi login dari AuthContext
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Redirect ke dashboard jika sudah login
+  useEffect(() => {
+    if (user) {
+      const roleBasedPath = getRoleDashboardPath(user.role);
+      navigate(roleBasedPath, { replace: true });
+    }
+  }, [user, navigate]);
+
+  // Helper function untuk menentukan path dashboard berdasarkan role
+  const getRoleDashboardPath = (role) => {
+    switch (role?.toLowerCase()) {
+      case 'admin':
+        return '/dashboard/admin';
+      case 'finance':
+        return '/dashboard/finance';
+      case 'hr':
+        return '/dashboard/hr';
+      case 'project':
+        return '/dashboard/project';
+      default:
+        return '/dashboard/admin';
+    }
+  };
 
   /**
    * Menangani proses submit form login.
@@ -41,23 +67,33 @@ const LoginPage = () => {
     }
     setLoading(true);
 
-    // Memanggil fungsi login dari context
-    const result = await login(credential, password);
-    
-    if (!result.success) {
+    try {
+      // Memanggil fungsi login dari context
+      const result = await login(credential, password);
+      
+      if (!result.success) {
+        toast({
+          title: "Login Gagal",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else {
+        // Login sukses, toast akan ditampilkan dan useEffect akan handle redirect
+        toast({
+          title: "Login Berhasil",
+          description: "Mengalihkan ke dashboard...",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: "Login Gagal",
-        description: result.error,
+        description: "Terjadi kesalahan saat login. Silakan coba lagi.",
         variant: "destructive",
       });
+    } finally {
       setLoading(false);
-    } else {
-      // Login sukses, biarkan useEffect di App.jsx menangani redirect
-      toast({
-        title: "Login Berhasil",
-        description: "Mengalihkan ke dashboard...",
-        variant: "default",
-      });
     }
   };
 

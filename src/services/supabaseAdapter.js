@@ -3,33 +3,48 @@ import { supabase } from '@/lib/customSupabaseClient';
 
 const supabaseAdapter = {
   login: async (credential, password) => {
-    let email;
-    const isEmail = credential.includes('@');
+    try {
+      let email;
+      const isEmail = credential.includes('@');
 
-    if (isEmail) {
-      email = credential.toLowerCase();
-    } else {
-      const username = credential.toLowerCase();
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('user_email:users(email)')
-        .eq('username', username)
-        .single();
-      
-      if (error || !data || !data.user_email) {
-        console.error('Error fetching user by username:', error);
-        return { success: false, error: 'Username tidak ditemukan.' };
+      if (isEmail) {
+        email = credential.toLowerCase();
+      } else {
+        const username = credential.toLowerCase();
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('user_email:users(email)')
+          .eq('username', username)
+          .single();
+        
+        if (error || !data || !data.user_email) {
+          console.error('Error fetching user by username:', error);
+          return { success: false, error: 'Username tidak ditemukan.' };
+        }
+        email = data.user_email.email;
       }
-      email = data.user_email.email;
+
+      console.log('Attempting login with email:', email);
+      const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
+      });
+
+      if (signInError) {
+        console.error('Sign in error:', signInError);
+        return { success: false, error: 'Email atau password salah.' };
+      }
+
+      if (authData.user) {
+        console.log('Login successful for user:', authData.user.id);
+        return { success: true, user: authData.user };
+      }
+
+      return { success: false, error: 'Login gagal. Silakan coba lagi.' };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'Terjadi kesalahan saat login.' };
     }
-
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (signInError) {
-      return { success: false, error: 'Email atau password salah.' };
-    }
-
-    return { success: true };
   },
 
   logout: async () => {
@@ -44,40 +59,64 @@ const supabaseAdapter = {
   },
   
   getUserProfile: async (userId) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select(`
-        id,
-        username,
-        name,
-        role,
-        permissions
-      `)
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(`
+          id,
+          username,
+          name,
+          role,
+          permissions
+        `)
+        .eq('id', userId)
+        .single();
 
-    if (error) {
-      console.error('Error fetching user profile:', error);
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        
+        // Fallback: try to get basic user info from auth
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError || !userData.user) {
+          return null;
+        }
+        
+        // Return basic profile if profiles table doesn't exist
+        return {
+          id: userData.user.id,
+          username: userData.user.email?.split('@')[0] || 'user',
+          name: userData.user.user_metadata?.full_name || userData.user.email?.split('@')[0] || 'User',
+          role: 'admin', // Default to admin for now
+          permissions: ['all']
+        };
+      }
+      return data;
+    } catch (error) {
+      console.error('Error in getUserProfile:', error);
       return null;
     }
-    return data;
   },
 
   getAllUsers: async () => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select(`
-        id,
-        username,
-        name,
-        role
-      `);
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(`
+          id,
+          username,
+          name,
+          role
+        `);
 
-    if (error) {
-      console.error('Error fetching all users:', error);
+      if (error) {
+        console.error('Error fetching all users:', error);
+        return [];
+      }
+      return data || [];
+    } catch (error) {
+      console.error('Error in getAllUsers:', error);
       return [];
     }
-    return data;
   },
 
   createUser: async (userData) => {
