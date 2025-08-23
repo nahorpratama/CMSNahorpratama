@@ -1,14 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon } from 'lucide-react';
+import { Menu, Bell, LogOut, Settings, MessageSquare, Sun, Moon, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from '@/components/ui/dropdown-menu';
 
 const Header = ({ onToggleSidebar, sidebarOpen }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, allUsers } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -22,12 +33,6 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
   };
 
   const handleNotificationClick = () => {
-    toast({
-      title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
-    });
-  };
-
-  const handleSettingsClick = () => {
     toast({
       title: "🚧 Fitur ini belum diimplementasikan—tapi jangan khawatir! Anda bisa memintanya di prompt berikutnya! 🚀"
     });
@@ -65,18 +70,9 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggleTheme}
-            className="hover:bg-accent hover:text-accent-foreground"
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
             onClick={() => navigate('/dashboard/chat')}
             className="hover:bg-accent hover:text-accent-foreground relative"
+            title="Buka Chat"
           >
             <MessageSquare className="w-5 h-5" />
           </Button>
@@ -86,6 +82,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
             size="icon"
             onClick={handleNotificationClick}
             className="hover:bg-accent hover:text-accent-foreground relative"
+            title="Notifikasi"
           >
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs flex items-center justify-center">
@@ -93,23 +90,74 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
             </span>
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleSettingsClick}
-            className="hover:bg-accent hover:text-accent-foreground"
-          >
-            <Settings className="w-5 h-5" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-accent hover:text-accent-foreground"
+                title="Pengaturan"
+              >
+                <Settings className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-72">
+              <DropdownMenuLabel>Pengaturan</DropdownMenuLabel>
+              <DropdownMenuSeparator />
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLogout}
-            className="hover:bg-destructive/20 hover:text-destructive"
-          >
-            <LogOut className="w-5 h-5" />
-          </Button>
+              <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+                <div className="flex items-start gap-3">
+                  {isDarkMode ? <Sun className="w-4 h-4 mt-0.5" /> : <Moon className="w-4 h-4 mt-0.5" />}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">Ubah Tema</span>
+                    <span className="text-xs text-muted-foreground">Beralih ke {isDarkMode ? 'tema terang' : 'tema gelap'}</span>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <span>Daftar Pengguna</span>
+                  </div>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="w-64">
+                  <DropdownMenuLabel>Pengguna Login ({allUsers?.length || 0})</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <div className="max-h-60 overflow-auto">
+                    {allUsers && allUsers.length > 0 ? (
+                      allUsers.map((u) => (
+                        <div key={u.id} className="px-2 py-1.5 text-sm flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center">
+                            <span className="text-xs font-semibold">{u?.name?.charAt(0) || 'U'}</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium leading-tight">{u?.name || 'Pengguna'}</span>
+                            <span className="text-xs text-muted-foreground capitalize leading-tight">{u?.role || 'role tidak diketahui'}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-2 py-1.5 text-sm text-muted-foreground">Belum ada pengguna login.</div>
+                    )}
+                  </div>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
+                <div className="flex items-start gap-3">
+                  <LogOut className="w-4 h-4 mt-0.5" />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">Keluar</span>
+                    <span className="text-xs text-muted-foreground">Keluar dari akun Anda</span>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </motion.header>
