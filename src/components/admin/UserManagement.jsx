@@ -23,12 +23,14 @@ import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { MetricCard, DataCard, StatsGrid } from '@/components/ui/dashboard-card';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const UserManagement = () => {
   const { toast } = useToast();
   const { allUsers, createUser, updateUser, deleteUser } = useAuth();
   const { language } = useLanguage();
   const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -40,7 +42,7 @@ const UserManagement = () => {
     email: '',
     password: '',
     role: 'project',
-    category: 'edit'
+    category: ''
   });
 
   // Language-specific content
@@ -159,6 +161,7 @@ const UserManagement = () => {
     if (allUsers) {
       setUsers(allUsers);
     }
+    fetchCategories();
   }, [allUsers]);
 
   const handleCreateUser = async () => {
@@ -244,7 +247,7 @@ const UserManagement = () => {
       email: '',
       password: '',
       role: 'project',
-      category: 'edit'
+      category: ''
     });
   };
 
@@ -264,14 +267,19 @@ const UserManagement = () => {
   };
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'edit':
-        return 'text-orange-600 bg-orange-500/10 border-orange-500/20';
-      case 'approval':
-        return 'text-teal-600 bg-teal-500/10 border-teal-500/20';
-      default:
-        return 'text-muted-foreground bg-muted border-border';
+    if (!category) return 'text-muted-foreground bg-muted border-border';
+    
+    const categoryData = categories.find(cat => cat.name === category);
+    if (categoryData && categoryData.color) {
+      // Convert hex to RGB and create a light background
+      const hex = categoryData.color.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      return `text-[${categoryData.color}] bg-[${categoryData.color}]/10 border-[${categoryData.color}]/20`;
     }
+    
+    return 'text-muted-foreground bg-muted border-border';
   };
 
   const getRoleLabel = (role) => {
@@ -290,13 +298,30 @@ const UserManagement = () => {
   };
 
   const getCategoryLabel = (category) => {
-    switch (category) {
-      case 'edit':
-        return t.actions.userEdit;
-      case 'approval':
-        return t.actions.userApproval;
-      default:
-        return category;
+    if (!category) return '';
+    
+    const categoryData = categories.find(cat => cat.name === category);
+    return categoryData ? categoryData.name : category;
+  };
+
+  // Fetch categories from Supabase
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch categories",
+        variant: "destructive"
+      });
     }
   };
 
@@ -415,8 +440,11 @@ const UserManagement = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t.actions.allCategories}</SelectItem>
-                  <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
-                  <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.name}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -450,7 +478,7 @@ const UserManagement = () => {
                       </span>
                     )}
                     <div className="flex gap-2">
-                      <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
+                      <EditUserDialog user={user} onSave={handleUpdateUser} t={t} categories={categories} />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-500 hover:bg-red-500/10">
@@ -544,11 +572,14 @@ const UserManagement = () => {
                   <Label htmlFor="category">{t.form.category}</Label>
                   <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
-                      <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.name}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -628,11 +659,14 @@ const UserManagement = () => {
                     <Label htmlFor="edit-category">{t.form.category}</Label>
                     <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                       <SelectTrigger>
-                        <SelectValue />
+                        <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
-                        <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.name}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -655,14 +689,14 @@ const UserManagement = () => {
 };
 
 // Edit User Dialog Component
-const EditUserDialog = ({ user, onSave, t }) => {
+const EditUserDialog = ({ user, onSave, t, categories }) => {
   const [formData, setFormData] = useState({
     name: user.name || '',
     username: user.username || '',
     email: user.email || '',
     password: '',
     role: user.role || 'project',
-    category: user.category || 'edit'
+    category: user.category || ''
   });
 
   const handleSubmit = () => {
@@ -736,11 +770,14 @@ const EditUserDialog = ({ user, onSave, t }) => {
               <Label htmlFor={`edit-${user.id}-category`}>{t.form.category}</Label>
               <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
-                  <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.name}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
