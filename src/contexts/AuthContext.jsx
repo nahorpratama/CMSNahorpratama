@@ -74,12 +74,36 @@ export const AuthProvider = ({ children }) => {
       console.log('Attempting login with credential:', credential);
       const result = await dbService.login(credential, password);
       console.log('Login result:', result);
+      
+      if (result.success && result.user) {
+        // Set user state immediately after successful login
+        try {
+          const profile = await dbService.getUserProfile(result.user.id);
+          if (profile) {
+            const userData = { 
+              id: result.user.id,
+              email: result.user.email,
+              ...profile 
+            };
+            console.log('Setting user state immediately:', userData);
+            setUser(userData);
+            await fetchAllUsers();
+          } else {
+            console.error("User authenticated but no profile found.");
+            return { success: false, error: 'Profile user tidak ditemukan. Silakan hubungi administrator.' };
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+          return { success: false, error: 'Gagal mengambil data profil user.' };
+        }
+      }
+      
       return result;
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: 'Terjadi kesalahan saat login' };
+      return { success: false, error: 'Terjadi kesalahan saat login.' };
     }
-  }, [dbService]);
+  }, [dbService, fetchAllUsers]);
 
   const logout = useCallback(async () => {
     setLoading(true);

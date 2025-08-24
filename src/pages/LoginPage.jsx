@@ -29,7 +29,9 @@ const LoginPage = () => {
   // Redirect ke dashboard jika sudah login
   useEffect(() => {
     if (user) {
+      console.log('User detected, redirecting to dashboard...', user);
       const roleBasedPath = getRoleDashboardPath(user.role);
+      console.log('Redirecting to:', roleBasedPath);
       navigate(roleBasedPath, { replace: true });
     }
   }, [user, navigate]);
@@ -68,8 +70,10 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
+      console.log('Starting login process...');
       // Memanggil fungsi login dari context
       const result = await login(credential, password);
+      console.log('Login result received:', result);
       
       if (!result.success) {
         toast({
@@ -78,12 +82,34 @@ const LoginPage = () => {
           variant: "destructive",
         });
       } else {
-        // Login sukses, toast akan ditampilkan dan useEffect akan handle redirect
+        // Login sukses, tunggu sebentar lalu redirect
         toast({
           title: "Login Berhasil",
           description: "Mengalihkan ke dashboard...",
           variant: "default",
         });
+        
+        console.log('Login successful, waiting for redirect...');
+        
+        // Tunggu toast muncul, lalu redirect manual
+        setTimeout(() => {
+          // Coba redirect berdasarkan credential yang dimasukkan
+          let role = 'admin'; // default role
+          
+          if (credential.toLowerCase().includes('finance')) {
+            role = 'finance';
+          } else if (credential.toLowerCase().includes('hr')) {
+            role = 'hr';
+          } else if (credential.toLowerCase().includes('project')) {
+            role = 'project';
+          }
+          
+          const dashboardPath = getRoleDashboardPath(role);
+          console.log('Manual redirect to:', dashboardPath);
+          
+          // Force navigation
+          window.location.href = dashboardPath;
+        }, 2000); // Tunggu 2 detik
       }
     } catch (error) {
       console.error('Login error:', error);
