@@ -126,7 +126,7 @@ const supabaseAdapter = {
     });
     if (error) return { success: false, error: error.message };
     if (data.error) return { success: false, error: data.error };
-    return { success: true, data };
+    return { success: true, data, message: data.message || 'User created successfully' };
   },
   
   updateUser: async (userId, userData) => {
@@ -135,7 +135,7 @@ const supabaseAdapter = {
     });
     if (error) return { success: false, error: error.message };
     if (data.error) return { success: false, error: data.error };
-    return { success: true, data };
+    return { success: true, data, message: data.message || 'User updated successfully' };
   },
 
   deleteUser: async (userId) => {
@@ -144,7 +144,7 @@ const supabaseAdapter = {
     });
     if (error) return { success: false, error: error.message };
     if (data.error) return { success: false, error: data.error };
-    return { success: true, data };
+    return { success: true, message: data.message || 'User deleted successfully' };
   },
 
   // Procurement Functions
