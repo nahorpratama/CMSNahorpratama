@@ -1,14 +1,14 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { createLogger, defineConfig } from 'vite';
+import inlineEditPlugin from './plugins/visual-editor/vite-plugin-react-inline-editor.js';
+import editModeDevPlugin from './plugins/visual-editor/vite-plugin-edit-mode.js';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const isDev = process.env.NODE_ENV !== 'production';
-let inlineEditPlugin, editModeDevPlugin;
-
-if (isDev) {
-	inlineEditPlugin = (await import('./plugins/visual-editor/vite-plugin-react-inline-editor.js')).default;
-	editModeDevPlugin = (await import('./plugins/visual-editor/vite-plugin-edit-mode.js')).default;
-}
 
 const configHorizonsViteErrorHandler = `
 const observer = new MutationObserver((mutations) => {
@@ -189,34 +189,38 @@ logger.error = (msg, options) => {
 	loggerError(msg, options);
 }
 
-export default defineConfig({
-	customLogger: logger,
-	plugins: [
-		...(isDev ? [inlineEditPlugin(), editModeDevPlugin()] : []),
-		react(),
-		addTransformIndexHtml
-	],
-	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
+export default defineConfig(({ command, mode }) => {
+	const isDevMode = command === 'serve' || mode !== 'production';
+
+	return {
+		customLogger: logger,
+		plugins: [
+			...(isDevMode ? [inlineEditPlugin(), editModeDevPlugin()] : []),
+			react(),
+			addTransformIndexHtml
+		],
+		server: {
+			cors: true,
+			headers: {
+				'Cross-Origin-Embedder-Policy': 'credentialless',
+			},
+			allowedHosts: true,
 		},
-		allowedHosts: true,
-	},
-	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
+		resolve: {
+			extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
+			alias: {
+				'@': path.resolve(__dirname, './src'),
+			},
 		},
-	},
-	build: {
-		rollupOptions: {
-			external: [
-				'@babel/parser',
-				'@babel/traverse',
-				'@babel/generator',
-				'@babel/types'
-			]
+		build: {
+			rollupOptions: {
+				external: [
+					'@babel/parser',
+					'@babel/traverse',
+					'@babel/generator',
+					'@babel/types'
+				]
+			}
 		}
-	}
+	};
 });
