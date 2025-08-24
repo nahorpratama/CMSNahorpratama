@@ -44,7 +44,8 @@ const supabaseAdapter = {
   },
   
   getUserProfile: async (userId) => {
-    const { data, error } = await supabase
+    // First try the full set of fields. If columns are missing, fall back to a minimal set.
+    let { data, error } = await supabase
       .from('profiles')
       .select(`
         id,
@@ -58,14 +59,37 @@ const supabaseAdapter = {
       .single();
 
     if (error) {
-      console.error('Error fetching user profile:', error);
+      console.warn('Full profile select failed, retrying with minimal fields:', error?.message || error);
+      const fallback = await supabase
+        .from('profiles')
+        .select(`
+          id,
+          username,
+          name,
+          role
+        `)
+        .eq('id', userId)
+        .single();
+      data = fallback.data;
+      error = fallback.error;
+    }
+
+    if (error) {
+      console.error('Error fetching user profile after fallback:', error);
       return null;
     }
-      return data;
+
+    // Provide safe defaults for optional fields
+    return {
+      ...data,
+      permissions: Array.isArray(data?.permissions) ? data.permissions : [],
+      category: data?.category ?? null,
+    };
   },
 
   getAllUsers: async () => {
-    const { data, error } = await supabase
+    // Try with category; if missing, fall back without it
+    let { data, error } = await supabase
       .from('profiles')
       .select(`
         id,
@@ -74,6 +98,20 @@ const supabaseAdapter = {
         role,
         category
       `);
+
+    if (error) {
+      console.warn('getAllUsers: category select failed, retrying without category:', error?.message || error);
+      const fallback = await supabase
+        .from('profiles')
+        .select(`
+          id,
+          username,
+          name,
+          role
+        `);
+      data = fallback.data;
+      error = fallback.error;
+    }
 
     if (error) {
       console.error('Error fetching all users:', error);
@@ -399,31 +437,10 @@ const supabaseAdapter = {
       }
       
       if (groupData.created_by !== userId) {
-        return { success: false, error: 'Hanya pembuat grup yang dapat menghapus grup ini' };
+        return { success: false, error: 'Hanya pembuat grup yang dapat menghapus grup' };
       }
       
-      // Delete all messages in the group
-      const { error: messagesError } = await supabase
-        .from('messages')
-        .delete()
-        .eq('chat_id', groupId)
-        .eq('chat_type', 'group');
-        
-      if (messagesError) {
-        console.warn('Error deleting group messages:', messagesError);
-      }
-      
-      // Delete group members
-      const { error: membersError } = await supabase
-        .from('group_members')
-        .delete()
-        .eq('group_id', groupId);
-        
-      if (membersError) {
-        return { success: false, error: membersError.message };
-      }
-      
-      // Delete the group
+      // Delete group and cascade will remove members and messages
       const { error: deleteError } = await supabase
         .from('group_chats')
         .delete()
@@ -435,7 +452,6 @@ const supabaseAdapter = {
       
       return { success: true };
     } catch (error) {
-      console.error('Error deleting group chat:', error);
       return { success: false, error: error.message };
     }
   },
