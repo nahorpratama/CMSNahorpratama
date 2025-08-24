@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -17,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
@@ -173,23 +172,32 @@ const UserManagement = () => {
         resetForm();
       } else {
         toast({
-          title: "Error",
+          title: 'Error',
           description: result.error,
-          variant: "destructive",
+          variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Terjadi kesalahan saat membuat pengguna.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Terjadi kesalahan saat membuat pengguna.',
+        variant: 'destructive',
       });
     }
   };
 
-  const handleUpdateUser = async (updatedData) => {
+  const handleUpdateUser = async (userId, updatedData) => {
     try {
-      const result = await updateUser(editingUser.id, updatedData);
+      const targetId = userId || editingUser?.id;
+      if (!targetId) {
+        toast({
+          title: 'Error',
+          description: 'User ID tidak ditemukan untuk update.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      const result = await updateUser(targetId, updatedData);
       if (result.success) {
         toast({
           title: t.messages.userUpdated,
@@ -199,16 +207,16 @@ const UserManagement = () => {
         resetForm();
       } else {
         toast({
-          title: "Error",
+          title: 'Error',
           description: result.error,
-          variant: "destructive",
+          variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Terjadi kesalahan saat memperbarui pengguna.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Terjadi kesalahan saat memperbarui pengguna.',
+        variant: 'destructive',
       });
     }
   };
@@ -223,16 +231,16 @@ const UserManagement = () => {
         });
       } else {
         toast({
-          title: "Error",
+          title: 'Error',
           description: result.error,
-          variant: "destructive",
+          variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Terjadi kesalahan saat menghapus pengguna.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Terjadi kesalahan saat menghapus pengguna.',
+        variant: 'destructive',
       });
     }
   };
@@ -443,14 +451,14 @@ const UserManagement = () => {
                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRoleColor(user.role)}`}>
                       {getRoleLabel(user.role)}
                     </span>
-                    {/* Show category badge for HR, Finance, and Project roles */}
-                    {(user.role === 'hr' || user.role === 'finance' || user.role === 'project') && user.category && (
+                    {/* Show category badge whenever category exists */}
+                    {user.category && (
                       <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(user.category)}`}>
                         {getCategoryLabel(user.category)}
                       </span>
                     )}
                     <div className="flex gap-2">
-                                              <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
+                      <EditUserDialog user={user} onSave={handleUpdateUser} t={t} />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-500 hover:bg-red-500/10">
@@ -603,7 +611,7 @@ const UserManagement = () => {
                   <Input
                     id="edit-password"
                     type="password"
-                    placeholder={language === 'id' ? "Kosongkan jika tidak ingin mengubah password" : "Leave empty if you don't want to change password"}
+                    placeholder={language === 'id' ? 'Kosongkan jika tidak ingin mengubah password' : "Leave empty if you don't want to change password"}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
@@ -638,7 +646,7 @@ const UserManagement = () => {
                   </div>
                 )}
                 <div className="flex gap-2 pt-4">
-                  <Button onClick={() => handleUpdateUser(formData)} className="flex-1">
+                  <Button onClick={() => handleUpdateUser(editingUser.id, formData)} className="flex-1">
                     {t.form.save}
                   </Button>
                   <Button variant="outline" onClick={() => setEditingUser(null)} className="flex-1">
@@ -666,7 +674,7 @@ const EditUserDialog = ({ user, onSave, t }) => {
   });
 
   const handleSubmit = () => {
-    onSave(formData);
+    onSave(user.id, formData);
   };
 
   return (
@@ -749,9 +757,11 @@ const EditUserDialog = ({ user, onSave, t }) => {
             <Button onClick={handleSubmit} className="flex-1">
               {t.form.save}
             </Button>
-            <Button variant="outline" className="flex-1">
-              {t.form.cancel}
-            </Button>
+            <DialogClose asChild>
+              <Button variant="outline" className="flex-1">
+                {t.form.cancel}
+              </Button>
+            </DialogClose>
           </div>
         </div>
       </DialogContent>
