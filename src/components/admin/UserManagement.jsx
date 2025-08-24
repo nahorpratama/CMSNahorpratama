@@ -103,7 +103,7 @@ const UserManagement = () => {
       metrics: {
         totalUsers: 'Total Users',
         activeUsers: 'Active Users',
-        adminUsers: 'Admin',
+        adminUsers: 'Admins',
         projectUsers: 'Project Users',
         hrUsers: 'HR Users',
         financeUsers: 'Finance Users'
@@ -188,16 +188,7 @@ const UserManagement = () => {
 
   const handleUpdateUser = async (userId, updatedData) => {
     try {
-      const targetId = userId || editingUser?.id;
-      if (!targetId) {
-        toast({
-          title: 'Error',
-          description: 'User ID tidak ditemukan untuk update.',
-          variant: 'destructive',
-        });
-        return;
-      }
-      const result = await updateUser(targetId, updatedData);
+      const result = await updateUser(userId, updatedData);
       if (result.success) {
         toast({
           title: t.messages.userUpdated,
@@ -451,8 +442,8 @@ const UserManagement = () => {
                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRoleColor(user.role)}`}>
                       {getRoleLabel(user.role)}
                     </span>
-                    {/* Show category badge whenever category exists */}
-                    {user.category && (
+                    {/* Show category badge for HR, Finance, and Project roles */}
+                    {(user.role === 'hr' || user.role === 'finance' || user.role === 'project') && user.category && (
                       <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(user.category)}`}>
                         {getCategoryLabel(user.category)}
                       </span>
@@ -490,9 +481,6 @@ const UserManagement = () => {
 
         {/* Create User Dialog */}
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <span className="hidden">Trigger</span>
-          </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>{t.form.create}</DialogTitle>
@@ -572,91 +560,6 @@ const UserManagement = () => {
             </div>
           </DialogContent>
         </Dialog>
-
-        {/* Edit User Dialog */}
-        {editingUser && (
-          <Dialog open={!!editingUser} onOpenChange={() => setEditingUser(null)}>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>{t.form.edit}</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="edit-name">{t.form.name}</Label>
-                  <Input
-                    id="edit-name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-username">{t.form.username}</Label>
-                  <Input
-                    id="edit-username"
-                    value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-email">{t.form.email}</Label>
-                  <Input
-                    id="edit-email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-password">{t.form.password}</Label>
-                  <Input
-                    id="edit-password"
-                    type="password"
-                    placeholder={language === 'id' ? 'Kosongkan jika tidak ingin mengubah password' : "Leave empty if you don't want to change password"}
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-role">{t.form.role}</Label>
-                  <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="admin">{t.actions.admin}</SelectItem>
-                      <SelectItem value="finance">{t.actions.finance}</SelectItem>
-                      <SelectItem value="hr">{t.actions.hr}</SelectItem>
-                      <SelectItem value="project">{t.actions.project}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* Show category field for HR, Finance, and Project roles */}
-                {(formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') && (
-                  <div>
-                    <Label htmlFor="edit-category">{t.form.category}</Label>
-                    <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="edit">{t.actions.userEdit}</SelectItem>
-                        <SelectItem value="approval">{t.actions.userApproval}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-                <div className="flex gap-2 pt-4">
-                  <Button onClick={() => handleUpdateUser(editingUser.id, formData)} className="flex-1">
-                    {t.form.save}
-                  </Button>
-                  <Button variant="outline" onClick={() => setEditingUser(null)} className="flex-1">
-                    {t.form.cancel}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
       </div>
     </>
   );
@@ -664,6 +567,7 @@ const UserManagement = () => {
 
 // Edit User Dialog Component
 const EditUserDialog = ({ user, onSave, t }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: user.name || '',
     username: user.username || '',
@@ -673,12 +577,44 @@ const EditUserDialog = ({ user, onSave, t }) => {
     category: user.category || 'edit'
   });
 
-  const handleSubmit = () => {
-    onSave(user.id, formData);
+  // Reset form data when user changes
+  useEffect(() => {
+    setFormData({
+      name: user.name || '',
+      username: user.username || '',
+      email: user.email || '',
+      password: '',
+      role: user.role || 'project',
+      category: user.category || 'edit'
+    });
+  }, [user]);
+
+  const handleSubmit = async () => {
+    try {
+      await onSave(user.id, formData);
+      setIsOpen(false); // Close dialog after successful save
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleOpenChange = (open) => {
+    setIsOpen(open);
+    if (!open) {
+      // Reset form when dialog closes
+      setFormData({
+        name: user.name || '',
+        username: user.username || '',
+        email: user.email || '',
+        password: '',
+        role: user.role || 'project',
+        category: user.category || 'edit'
+      });
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" className="text-blue-600 hover:text-blue-500 hover:bg-blue-500/10">
           <Edit className="h-4 w-4" />
@@ -757,11 +693,9 @@ const EditUserDialog = ({ user, onSave, t }) => {
             <Button onClick={handleSubmit} className="flex-1">
               {t.form.save}
             </Button>
-            <DialogClose asChild>
-              <Button variant="outline" className="flex-1">
-                {t.form.cancel}
-              </Button>
-            </DialogClose>
+            <Button variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
+              {t.form.cancel}
+            </Button>
           </div>
         </div>
       </DialogContent>
