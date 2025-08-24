@@ -28,8 +28,11 @@ serve(async (req) => {
     const { userId, userData } = await req.json()
     const { name, username, email, password, role, category } = userData
 
+    console.log('Update user request:', { userId, userData })
+
     // Validate required fields
     if (!userId) {
+      console.error('Missing userId in request')
       return new Response(
         JSON.stringify({ error: 'Missing userId' }),
         { 
@@ -44,6 +47,8 @@ serve(async (req) => {
       const authUpdates: any = {}
       if (email) authUpdates.email = email
       if (password) authUpdates.password = password
+
+      console.log('Updating auth user:', authUpdates)
 
       const { error: authError } = await supabaseClient.auth.admin.updateUserById(
         userId,
@@ -69,6 +74,23 @@ serve(async (req) => {
     if (role) profileUpdates.role = role
     if (category !== undefined) profileUpdates.category = category // Allow setting to null/empty
 
+    console.log('Profile updates to apply:', profileUpdates)
+
+    // Check if we have any profile updates
+    if (Object.keys(profileUpdates).length === 0) {
+      console.log('No profile updates to apply')
+      return new Response(
+        JSON.stringify({ 
+          message: 'No profile updates to apply',
+          user: null
+        }),
+        { 
+          status: 200, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+
     // Update profile
     const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
@@ -87,6 +109,8 @@ serve(async (req) => {
         }
       )
     }
+
+    console.log('Profile updated successfully:', profile)
 
     return new Response(
       JSON.stringify({ 
