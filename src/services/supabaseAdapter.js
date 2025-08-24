@@ -97,7 +97,8 @@ const supabaseAdapter = {
     });
     if (error) return { success: false, error: error.message };
     if (data.error) return { success: false, error: data.error };
-    return { success: true, data };
+    // Normalize response to include message and updated user directly
+    return { success: true, data: data.user, message: data.message };
   },
 
   deleteUser: async (userId) => {
