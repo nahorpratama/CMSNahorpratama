@@ -160,36 +160,19 @@ const UserManagement = () => {
     }
   }, [allUsers]);
 
-  const handleCreateUser = async () => {
-    try {
-      const result = await createUser(formData);
-      if (result.success) {
-        toast({
-          title: t.messages.userCreated,
-          description: result.message,
-        });
-        setIsCreateDialogOpen(false);
-        resetForm();
-      } else {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Terjadi kesalahan saat membuat pengguna.',
-        variant: 'destructive',
-      });
-    }
-  };
-
   const handleUpdateUser = async (userId, updatedData) => {
     try {
       const result = await updateUser(userId, updatedData);
       if (result.success) {
+        // Update local users state immediately for better UX
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.id === userId 
+              ? { ...user, ...updatedData }
+              : user
+          )
+        );
+        
         toast({
           title: t.messages.userUpdated,
           description: result.message,
@@ -245,6 +228,57 @@ const UserManagement = () => {
       role: 'project',
       category: 'edit'
     });
+  };
+
+  // Handle role change in create form and ensure category is set
+  const handleCreateRoleChange = (newRole) => {
+    let newCategory = formData.category;
+    
+    // If changing to a role that needs category, ensure category is set
+    if ((newRole === 'hr' || newRole === 'finance' || newRole === 'project')) {
+      // Keep existing category if it's valid, otherwise set default
+      if (!newCategory || (newCategory !== 'edit' && newCategory !== 'approval')) {
+        newCategory = 'edit';
+      }
+    }
+    
+    setFormData({
+      ...formData,
+      role: newRole,
+      category: newCategory
+    });
+  };
+
+  const handleCreateUser = async () => {
+    try {
+      // Ensure category is included for roles that need it
+      const dataToSubmit = { ...formData };
+      if (formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') {
+        dataToSubmit.category = formData.category || 'edit';
+      }
+      
+      const result = await createUser(dataToSubmit);
+      if (result.success) {
+        toast({
+          title: t.messages.userCreated,
+          description: result.message,
+        });
+        setIsCreateDialogOpen(false);
+        resetForm();
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Terjadi kesalahan saat membuat pengguna.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const getRoleColor = (role) => {
@@ -522,7 +556,7 @@ const UserManagement = () => {
               </div>
               <div>
                 <Label htmlFor="role">{t.form.role}</Label>
-                <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
+                <Select value={formData.role} onValueChange={handleCreateRoleChange}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -589,9 +623,34 @@ const EditUserDialog = ({ user, onSave, t }) => {
     });
   }, [user]);
 
+  // Handle role change and ensure category is set
+  const handleRoleChange = (newRole) => {
+    let newCategory = formData.category;
+    
+    // If changing to a role that needs category, ensure category is set
+    if ((newRole === 'hr' || newRole === 'finance' || newRole === 'project')) {
+      // Keep existing category if it's valid, otherwise set default
+      if (!newCategory || (newCategory !== 'edit' && newCategory !== 'approval')) {
+        newCategory = 'edit';
+      }
+    }
+    
+    setFormData({
+      ...formData,
+      role: newRole,
+      category: newCategory
+    });
+  };
+
   const handleSubmit = async () => {
     try {
-      await onSave(user.id, formData);
+      // Ensure category is included for roles that need it
+      const dataToSubmit = { ...formData };
+      if (formData.role === 'hr' || formData.role === 'finance' || formData.role === 'project') {
+        dataToSubmit.category = formData.category || 'edit';
+      }
+      
+      await onSave(user.id, dataToSubmit);
       setIsOpen(false); // Close dialog after successful save
     } catch (error) {
       console.error('Error updating user:', error);
@@ -662,7 +721,7 @@ const EditUserDialog = ({ user, onSave, t }) => {
           </div>
           <div>
             <Label htmlFor={`edit-${user.id}-role`}>{t.form.role}</Label>
-            <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
+            <Select value={formData.role} onValueChange={handleRoleChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
