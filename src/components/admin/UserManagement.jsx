@@ -190,9 +190,13 @@ const UserManagement = () => {
     try {
       const result = await updateUser(userId, updatedData);
       if (result.success) {
+        // Optimistically update local list so UI reflects category change immediately
+        if (result.data) {
+          setUsers(prev => prev.map(u => u.id === userId ? { ...u, ...result.data } : u));
+        }
         toast({
           title: t.messages.userUpdated,
-          description: result.message,
+          description: result.message || 'Perubahan tersimpan.',
         });
         setEditingUser(null);
         resetForm();
