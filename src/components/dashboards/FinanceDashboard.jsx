@@ -19,6 +19,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import PPH21Monthly from '@/components/finance/PPH21Monthly';
+import PPH21Calculation from '@/components/finance/PPH21Calculation';
 
 const FinanceDashboard = () => {
   const { toast } = useToast();
@@ -34,7 +35,8 @@ const FinanceDashboard = () => {
         overview: 'Overview',
         reports: 'Laporan',
         transactions: 'Transaksi',
-        pph21: 'PPh21 Bulanan'
+        pph21: 'PPh21 Bulanan',
+        pph21calc: 'PPh21 Perhitungan'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -72,7 +74,8 @@ const FinanceDashboard = () => {
         overview: 'Overview',
         reports: 'Reports',
         transactions: 'Transactions',
-        pph21: 'Monthly PPh21'
+        pph21: 'Monthly PPh21',
+        pph21calc: 'PPh21 Calculation'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -264,6 +267,10 @@ const FinanceDashboard = () => {
             <FileText className="w-4 h-4" />
             {t.navigation.pph21}
           </NavLink>
+          <NavLink to="/dashboard/finance/pph21-calculation" className={({ isActive }) => `glass-effect border-orange-500/30 hover:bg-orange-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-orange-500/30' : ''}`}>
+            <PieChart className="w-4 h-4" />
+            {t.navigation.pph21calc}
+          </NavLink>
         </div>
 
         <Routes>
@@ -439,6 +446,7 @@ const FinanceDashboard = () => {
             </div>
           } />
           <Route path="/pph21" element={<PPH21Monthly />} />
+          <Route path="/pph21-calculation" element={<PPH21Calculation />} />
         </Routes>
       </div>
     </>
