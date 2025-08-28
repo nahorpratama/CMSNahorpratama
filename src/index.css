@@ -68,6 +68,7 @@
 body {
   @apply bg-background text-foreground font-sans antialiased min-h-screen transition-colors duration-300;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
 }
 
 /* Updated component styles for theme support */
@@ -110,6 +111,24 @@ body {
 
 .data-table tr:hover {
   @apply bg-muted/50;
+}
+
+/* Prevent global horizontal scroll; only allow it in table wrappers */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Ensure table areas can scroll horizontally without forcing page scroll */
+.table-scroll-wrapper,
+.overflow-x-auto {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional: clamp table width to avoid forcing page width expansion */
+.data-table,
+table {
+  max-width: 100%;
 }
 
 .status-badge {
