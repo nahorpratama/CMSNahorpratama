@@ -21,6 +21,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import PPH21Monthly from '@/components/finance/PPH21Monthly';
 import PPHUnifikasi from '@/components/finance/PPHUnifikasi';
 import PPH21Calculation from '@/components/finance/PPH21Calculation';
+import WithholdingTaxSlip from '@/components/finance/WithholdingTaxSlip';
 
 const FinanceDashboard = () => {
   const { toast } = useToast();
@@ -38,7 +39,8 @@ const FinanceDashboard = () => {
         transactions: 'Transaksi',
         pph21: 'PPh21 Bulanan',
         pph21calc: 'PPh21 Perhitungan',
-        pphUnifikasi: 'PPh Unifikasi'
+        pphUnifikasi: 'PPh Unifikasi',
+        withholding: 'Withholding Tax Slip'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -78,7 +80,8 @@ const FinanceDashboard = () => {
         transactions: 'Transactions',
         pph21: 'Monthly PPh21',
         pph21calc: 'PPh21 Calculation',
-        pphUnifikasi: 'PPh Unification'
+        pphUnifikasi: 'PPh Unification',
+        withholding: 'Withholding Tax Slip'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -278,6 +281,10 @@ const FinanceDashboard = () => {
             <FileText className="w-4 h-4" />
             {t.navigation.pphUnifikasi}
           </NavLink>
+          <NavLink to="/dashboard/finance/withholding-tax-slip" className={({ isActive }) => `glass-effect border-teal-500/30 hover:bg-teal-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-teal-500/30' : ''}`}>
+            <FileText className="w-4 h-4" />
+            {t.navigation.withholding}
+          </NavLink>
         </div>
 
         <Routes>
@@ -455,6 +462,7 @@ const FinanceDashboard = () => {
           <Route path="/pph21" element={<PPH21Monthly />} />
           <Route path="/pph21-calculation" element={<PPH21Calculation />} />
           <Route path="/pph-unifikasi" element={<PPHUnifikasi />} />
+          <Route path="/withholding-tax-slip" element={<WithholdingTaxSlip />} />
         </Routes>
       </div>
     </>
