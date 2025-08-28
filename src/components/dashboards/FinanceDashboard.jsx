@@ -18,6 +18,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useToast } from '@/components/ui/use-toast';
 import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 import { useLanguage } from '@/contexts/LanguageContext';
+import PPH21Monthly from '@/components/finance/PPH21Monthly';
+import PPHUnifikasi from '@/components/finance/PPHUnifikasi';
+import PPH21Calculation from '@/components/finance/PPH21Calculation';
+import WithholdingTaxSlip from '@/components/finance/WithholdingTaxSlip';
 
 const FinanceDashboard = () => {
   const { toast } = useToast();
@@ -32,7 +36,11 @@ const FinanceDashboard = () => {
       navigation: {
         overview: 'Overview',
         reports: 'Laporan',
-        transactions: 'Transaksi'
+        transactions: 'Transaksi',
+        pph21: 'PPh21 Bulanan',
+        pph21calc: 'PPh21 Perhitungan',
+        pphUnifikasi: 'PPh Unifikasi',
+        withholding: 'Withholding Tax Slip'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -69,7 +77,11 @@ const FinanceDashboard = () => {
       navigation: {
         overview: 'Overview',
         reports: 'Reports',
-        transactions: 'Transactions'
+        transactions: 'Transactions',
+        pph21: 'Monthly PPh21',
+        pph21calc: 'PPh21 Calculation',
+        pphUnifikasi: 'PPh Unification',
+        withholding: 'Withholding Tax Slip'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -257,6 +269,22 @@ const FinanceDashboard = () => {
             <CreditCard className="w-4 h-4" />
             {t.navigation.transactions}
           </NavLink>
+          <NavLink to="/dashboard/finance/pph21" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-amber-500/30' : ''}`}>
+            <FileText className="w-4 h-4" />
+            {t.navigation.pph21}
+          </NavLink>
+          <NavLink to="/dashboard/finance/pph21-calculation" className={({ isActive }) => `glass-effect border-orange-500/30 hover:bg-orange-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-orange-500/30' : ''}`}>
+            <PieChart className="w-4 h-4" />
+            {t.navigation.pph21calc}
+          </NavLink>
+          <NavLink to="/dashboard/finance/pph-unifikasi" className={({ isActive }) => `glass-effect border-yellow-500/30 hover:bg-yellow-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-500/30' : ''}`}>
+            <FileText className="w-4 h-4" />
+            {t.navigation.pphUnifikasi}
+          </NavLink>
+          <NavLink to="/dashboard/finance/withholding-tax-slip" className={({ isActive }) => `glass-effect border-teal-500/30 hover:bg-teal-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-teal-500/30' : ''}`}>
+            <FileText className="w-4 h-4" />
+            {t.navigation.withholding}
+          </NavLink>
         </div>
 
         <Routes>
@@ -431,6 +459,10 @@ const FinanceDashboard = () => {
               </DataCard>
             </div>
           } />
+          <Route path="/pph21" element={<PPH21Monthly />} />
+          <Route path="/pph21-calculation" element={<PPH21Calculation />} />
+          <Route path="/pph-unifikasi" element={<PPHUnifikasi />} />
+          <Route path="/withholding-tax-slip" element={<WithholdingTaxSlip />} />
         </Routes>
       </div>
     </>
