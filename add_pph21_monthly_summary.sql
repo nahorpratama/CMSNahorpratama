@@ -19,10 +19,16 @@ alter table public.pph21_monthly_summary enable row level security;
 -- Allow read for authenticated roles (adjust to your org policy)
 do $$ begin
   if not exists (
-    select 1 from pg_policies where polname = 'pph21_monthly_summary_select_auth'
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'pph21_monthly_summary'
+      and policyname = 'pph21_monthly_summary_select_auth'
   ) then
     create policy pph21_monthly_summary_select_auth on public.pph21_monthly_summary
-      for select to authenticated using (true);
+      for select
+      to authenticated
+      using (true);
   end if;
 end $$;
 
@@ -31,10 +37,17 @@ end $$;
 -- Here we keep it permissive for authenticated for demo; tighten as needed.
 do $$ begin
   if not exists (
-    select 1 from pg_policies where polname = 'pph21_monthly_summary_modify_auth'
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'pph21_monthly_summary'
+      and policyname = 'pph21_monthly_summary_modify_auth'
   ) then
     create policy pph21_monthly_summary_modify_auth on public.pph21_monthly_summary
-      for all to authenticated using (true) with check (true);
+      for all
+      to authenticated
+      using (true)
+      with check (true);
   end if;
 end $$;
 
