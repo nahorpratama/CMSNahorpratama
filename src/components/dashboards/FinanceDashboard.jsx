@@ -18,6 +18,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useToast } from '@/components/ui/use-toast';
 import { MetricCard, ChartCard, DataCard, StatsGrid, ContentGrid } from '@/components/ui/dashboard-card';
 import { useLanguage } from '@/contexts/LanguageContext';
+import PPH21Monthly from '@/components/finance/PPH21Monthly';
 
 const FinanceDashboard = () => {
   const { toast } = useToast();
@@ -32,7 +33,8 @@ const FinanceDashboard = () => {
       navigation: {
         overview: 'Overview',
         reports: 'Laporan',
-        transactions: 'Transaksi'
+        transactions: 'Transaksi',
+        pph21: 'PPh21 Bulanan'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -69,7 +71,8 @@ const FinanceDashboard = () => {
       navigation: {
         overview: 'Overview',
         reports: 'Reports',
-        transactions: 'Transactions'
+        transactions: 'Transactions',
+        pph21: 'Monthly PPh21'
       },
       metrics: {
         totalRevenue: 'Total Revenue',
@@ -257,6 +260,10 @@ const FinanceDashboard = () => {
             <CreditCard className="w-4 h-4" />
             {t.navigation.transactions}
           </NavLink>
+          <NavLink to="/dashboard/finance/pph21" className={({ isActive }) => `glass-effect border-amber-500/30 hover:bg-amber-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-amber-500/30' : ''}`}>
+            <FileText className="w-4 h-4" />
+            {t.navigation.pph21}
+          </NavLink>
         </div>
 
         <Routes>
@@ -431,6 +438,7 @@ const FinanceDashboard = () => {
               </DataCard>
             </div>
           } />
+          <Route path="/pph21" element={<PPH21Monthly />} />
         </Routes>
       </div>
     </>
