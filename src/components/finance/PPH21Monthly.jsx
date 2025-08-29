@@ -153,15 +153,15 @@ const PPH21Monthly = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <FileText className="w-6 h-6 text-primary" />
           <div>
             <h2 className="text-xl font-semibold">Master Data Summary PPh21 Bulanan</h2>
             <p className="text-sm text-muted-foreground">Kelola data ringkasan PPh21 per karyawan (PK: employeeid)</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-start sm:justify-end flex-wrap">
           <Button variant="outline" onClick={loadRecords} disabled={loading}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Muat Ulang
@@ -173,21 +173,21 @@ const PPH21Monthly = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4">
+        <div className="w-full md:flex-1 min-w-0">
           <Input
             placeholder="Cari nama, employeeid, atau NPWP..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground w-full md:w-auto pt-2 md:pt-0">
           Total: {filteredRecords.length}
         </div>
       </div>
 
       <div className="rounded-md border border-border overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-muted/50">
               <tr>
