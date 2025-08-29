@@ -53,6 +53,7 @@ const PPH21Calculation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const ROWS_PER_PAGE = 20;
 
   const filteredRecords = useMemo(() => {
@@ -88,7 +89,8 @@ const PPH21Calculation = () => {
   const handleOpenCreate = () => {
     resetForm();
     setIsEditing(false);
-    setDialogOpen(true);
+    setShowCreateForm(true);
+    setDialogOpen(false);
   };
 
   const handleOpenEdit = (row) => {
@@ -243,6 +245,280 @@ const PPH21Calculation = () => {
           Total: {filteredRecords.length}
         </div>
       </div>
+
+      {showCreateForm && (
+        <div className="rounded-md border border-border p-4 bg-card/50 space-y-4">
+          <div className="text-sm font-medium">Tambah Perhitungan PPh21</div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Employee ID (NIK)</Label>
+                <Input
+                  value={form.employeeid}
+                  onChange={(e) => setForm((p) => ({ ...p, employeeid: e.target.value }))}
+                  placeholder="EMP001"
+                  disabled={isEditing}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Name</Label>
+                <Input
+                  value={form.name}
+                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  placeholder="Nama Karyawan"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Gender</Label>
+                <Input
+                  value={form.gender}
+                  onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
+                  placeholder="Laki-laki / Perempuan"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Occupation</Label>
+                <Input
+                  value={form.occupation}
+                  onChange={(e) => setForm((p) => ({ ...p, occupation: e.target.value }))}
+                  placeholder="Jabatan"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label>Alamat</Label>
+                <textarea
+                  value={form.alamat}
+                  onChange={(e) => setForm((p) => ({ ...p, alamat: e.target.value }))}
+                  placeholder="Alamat lengkap"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  rows={3}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>NPWP</Label>
+                <Input
+                  value={form.npwp}
+                  onChange={(e) => setForm((p) => ({ ...p, npwp: e.target.value }))}
+                  placeholder="99.999.999.9-999.999"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Marital Status</Label>
+                <Input
+                  value={form.marital_status}
+                  onChange={(e) => setForm((p) => ({ ...p, marital_status: e.target.value }))}
+                  placeholder="TK/0, K/1, dst"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Kategori TER</Label>
+                <Input
+                  value={form.kategori_ter}
+                  onChange={(e) => setForm((p) => ({ ...p, kategori_ter: e.target.value }))}
+                  placeholder="Kategori TER"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Salary</Label>
+                <Input
+                  type="number"
+                  value={form.salary}
+                  onChange={(e) => setForm((p) => ({ ...p, salary: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>BPJS TK - Paid by Company</Label>
+                <Input
+                  type="number"
+                  value={form.bpjs_tk_company}
+                  onChange={(e) => setForm((p) => ({ ...p, bpjs_tk_company: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>BPJS Kesehatan - Paid by Company</Label>
+                <Input
+                  type="number"
+                  value={form.bpjs_kesehatan_company}
+                  onChange={(e) => setForm((p) => ({ ...p, bpjs_kesehatan_company: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>BPJS TK - Paid by Personal</Label>
+                <Input
+                  type="number"
+                  value={form.bpjs_tk_personal}
+                  onChange={(e) => setForm((p) => ({ ...p, bpjs_tk_personal: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>BPJS Kesehatan - Paid by Personal</Label>
+                <Input
+                  type="number"
+                  value={form.bpjs_kesehatan_personal}
+                  onChange={(e) => setForm((p) => ({ ...p, bpjs_kesehatan_personal: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan Lapangan</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_lapangan}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_lapangan: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan Kendaraan</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_kendaraan}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_kendaraan: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan Transportasi</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_transportasi}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_transportasi: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan Kehadiran di HO</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_kehadiran_ho}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_kehadiran_ho: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan Kehadiran di Proyek</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_kehadiran_proyek}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_kehadiran_proyek: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Lain-Lain</Label>
+                <Input
+                  type="number"
+                  value={form.lain_lain}
+                  onChange={(e) => setForm((p) => ({ ...p, lain_lain: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Kasbon</Label>
+                <Input
+                  type="number"
+                  value={form.kasbon}
+                  onChange={(e) => setForm((p) => ({ ...p, kasbon: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Absen</Label>
+                <Input
+                  type="number"
+                  value={form.absen}
+                  onChange={(e) => setForm((p) => ({ ...p, absen: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Take Home</Label>
+                <Input
+                  type="number"
+                  value={form.take_home}
+                  onChange={(e) => setForm((p) => ({ ...p, take_home: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tunjangan PPh 21</Label>
+                <Input
+                  type="number"
+                  value={form.tunjangan_pph21}
+                  onChange={(e) => setForm((p) => ({ ...p, tunjangan_pph21: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Objek Pajak</Label>
+                <Input
+                  value={form.objek_pajak}
+                  onChange={(e) => setForm((p) => ({ ...p, objek_pajak: e.target.value }))}
+                  placeholder="Kode/Objek Pajak"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tarif TER (%)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.tarif_ter}
+                  onChange={(e) => setForm((p) => ({ ...p, tarif_ter: e.target.value }))}
+                  placeholder="5"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>PPh Masa/Bulanan</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.pph_masa}
+                  onChange={(e) => setForm((p) => ({ ...p, pph_masa: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>PPh 21 NPWP</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.pph21_npwp}
+                  onChange={(e) => setForm((p) => ({ ...p, pph21_npwp: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => { resetForm(); setShowCreateForm(false); }}>Batal</Button>
+              <Button type="submit">Simpan</Button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>

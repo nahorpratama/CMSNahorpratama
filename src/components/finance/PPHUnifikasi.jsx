@@ -38,6 +38,7 @@ const PPHUnifikasi = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const ROWS_PER_PAGE = 20;
 
   const filteredRecords = useMemo(() => {
@@ -73,7 +74,8 @@ const PPHUnifikasi = () => {
   const handleOpenCreate = () => {
     resetForm();
     setIsEditing(false);
-    setDialogOpen(true);
+    setShowCreateForm(true);
+    setDialogOpen(false);
   };
 
   const handleOpenEdit = (row) => {
@@ -198,6 +200,127 @@ const PPHUnifikasi = () => {
           Total: {filteredRecords.length}
         </div>
       </div>
+
+      {showCreateForm && (
+        <div className="rounded-md border border-border p-4 bg-card/50 space-y-4">
+          <div className="text-sm font-medium">Tambah PPh Unifikasi</div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Employee ID (NIK)</Label>
+                <Input
+                  value={form.employeeid}
+                  onChange={(e) => setForm((p) => ({ ...p, employeeid: e.target.value }))}
+                  placeholder="EMP001"
+                  disabled={isEditing}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Nama</Label>
+                <Input
+                  value={form.nama}
+                  onChange={(e) => setForm((p) => ({ ...p, nama: e.target.value }))}
+                  placeholder="Nama Karyawan"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>NPWP</Label>
+                <Input
+                  value={form.npwp}
+                  onChange={(e) => setForm((p) => ({ ...p, npwp: e.target.value }))}
+                  placeholder="99.999.999.9-999.999"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Nomor BP</Label>
+                <Input
+                  value={form.nomor_bp}
+                  onChange={(e) => setForm((p) => ({ ...p, nomor_bp: e.target.value }))}
+                  placeholder="Nomor Bukti Potong"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tanggal</Label>
+                <Input
+                  type="date"
+                  value={form.tanggal}
+                  onChange={(e) => setForm((p) => ({ ...p, tanggal: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Jenis Pajak</Label>
+                <Input
+                  value={form.jenis_pajak}
+                  onChange={(e) => setForm((p) => ({ ...p, jenis_pajak: e.target.value }))}
+                  placeholder="PPh21 / PPh23 / ..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Kode Objek Pajak</Label>
+                <Input
+                  value={form.kode_objek_pajak}
+                  onChange={(e) => setForm((p) => ({ ...p, kode_objek_pajak: e.target.value }))}
+                  placeholder="21-100-01"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>DPP (Rp)</Label>
+                <Input
+                  type="number"
+                  value={form.dpp}
+                  onChange={(e) => setForm((p) => ({ ...p, dpp: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tarif (%)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.tarif}
+                  onChange={(e) => setForm((p) => ({ ...p, tarif: e.target.value }))}
+                  placeholder="2.5"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>PPh</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.pph}
+                  onChange={(e) => setForm((p) => ({ ...p, pph: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>KAP-KJS</Label>
+                <Input
+                  value={form.kap_kjs}
+                  onChange={(e) => setForm((p) => ({ ...p, kap_kjs: e.target.value }))}
+                  placeholder="KAP-KJS"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label>Objek Pajak</Label>
+                <Input
+                  value={form.objek_pajak}
+                  onChange={(e) => setForm((p) => ({ ...p, objek_pajak: e.target.value }))}
+                  placeholder="Objek Pajak"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => { resetForm(); setShowCreateForm(false); }}>Batal</Button>
+              <Button type="submit">Simpan</Button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
