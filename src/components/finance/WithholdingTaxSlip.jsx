@@ -45,7 +45,7 @@ const WithholdingTaxSlip = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
-  const ROWS_PER_PAGE = 5;
+  const ROWS_PER_PAGE = 20;
 
   const filteredRecords = useMemo(() => {
     if (!search.trim()) return records;
@@ -221,7 +221,7 @@ const WithholdingTaxSlip = () => {
       </div>
 
       <div className="rounded-md border border-border overflow-hidden">
-        <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 5 baris data</div>
+        <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
         <div className="table-container w-full">
           <table className="min-w-[1800px] table-fixed divide-y divide-border">
             <thead className="bg-muted/50">

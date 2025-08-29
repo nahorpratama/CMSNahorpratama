@@ -187,7 +187,7 @@ const PPH21Monthly = () => {
       </div>
 
       <div className="rounded-md border border-border overflow-hidden">
-        <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 5 baris data</div>
+        <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
         <div className="overflow-x-auto w-full">
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-muted/50">
@@ -216,7 +216,7 @@ const PPH21Monthly = () => {
                   <td colSpan={11} className="px-3 py-6 text-center text-sm text-muted-foreground">Tidak ada data</td>
                 </tr>
               )}
-              {!loading && filteredRecords.slice(0, 5).map((row, idx) => (
+              {!loading && filteredRecords.slice(0, 20).map((row, idx) => (
                 <tr key={row.employeeid} className="hover:bg-muted/30">
                   <td className="px-3 py-2 text-sm">{idx + 1}</td>
                   <td className="px-3 py-2 text-sm whitespace-nowrap">{row.npwp || '-'}</td>
