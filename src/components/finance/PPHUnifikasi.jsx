@@ -200,10 +200,11 @@ const PPHUnifikasi = () => {
       </div>
 
       <div className="rounded-md border border-border overflow-hidden">
+        <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
         <div className="overflow-x-auto w-full">
           <table className="min-w-[1600px] table-fixed divide-y divide-border">
             <thead className="bg-muted/50">
-              <tr>
+              <tr className="sticky top-0 bg-muted/70 backdrop-blur supports-[backdrop-filter]:bg-muted/60">
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-12">No</th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Employee ID</th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">NPWP</th>
@@ -232,7 +233,7 @@ const PPHUnifikasi = () => {
                 </tr>
               )}
               {!loading && filteredRecords.slice(0, ROWS_PER_PAGE).map((row, idx) => (
-                <tr key={row.employeeid} className="hover:bg-muted/40 transition-colors">
+                <tr key={row.employeeid} className="hover:bg-primary/5 transition-colors">
                   <td className="px-3 py-2 text-sm w-12">{idx + 1}</td>
                   <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.employeeid}</td>
                   <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.npwp || '-'}</td>
