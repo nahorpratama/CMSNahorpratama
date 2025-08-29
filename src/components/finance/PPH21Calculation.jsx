@@ -206,6 +206,7 @@ const PPH21Calculation = () => {
         toast({ title: 'Berhasil', description: 'Data ditambahkan' });
         setRecords((prev) => [data, ...prev]);
         setDialogOpen(false);
+        setShowCreateForm(false);
       }
     }
   };

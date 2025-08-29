@@ -35,6 +35,7 @@ const PPH21Monthly = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   const filteredRecords = useMemo(() => {
     if (!search.trim()) return records;
@@ -69,7 +70,8 @@ const PPH21Monthly = () => {
   const handleOpenCreate = () => {
     resetForm();
     setIsEditing(false);
-    setDialogOpen(true);
+    setShowCreateForm(true);
+    setDialogOpen(false);
   };
 
   const handleOpenEdit = (row) => {
@@ -147,6 +149,7 @@ const PPH21Monthly = () => {
         toast({ title: 'Berhasil', description: 'Data ditambahkan' });
         setRecords((prev) => [data, ...prev]);
         setDialogOpen(false);
+        setShowCreateForm(false);
       }
     }
   };
@@ -185,6 +188,105 @@ const PPH21Monthly = () => {
           Total: {filteredRecords.length}
         </div>
       </div>
+
+      {showCreateForm && (
+        <div className="rounded-md border border-border p-4 bg-card/50 space-y-4">
+          <div className="text-sm font-medium">Tambah Data PPh21 Bulanan</div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Employee ID</Label>
+                <Input
+                  value={form.employeeid}
+                  onChange={(e) => setForm((p) => ({ ...p, employeeid: e.target.value }))}
+                  placeholder="EMP001"
+                  disabled={isEditing}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Nama</Label>
+                <Input
+                  value={form.nama}
+                  onChange={(e) => setForm((p) => ({ ...p, nama: e.target.value }))}
+                  placeholder="Nama Karyawan"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>NPWP</Label>
+                <Input
+                  value={form.npwp}
+                  onChange={(e) => setForm((p) => ({ ...p, npwp: e.target.value }))}
+                  placeholder="99.999.999.9-999.999"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Kode Objek Pajak</Label>
+                <Input
+                  value={form.kode_objek_pajak}
+                  onChange={(e) => setForm((p) => ({ ...p, kode_objek_pajak: e.target.value }))}
+                  placeholder="21-100-01"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>PTKP</Label>
+                <Input
+                  value={form.ptkp}
+                  onChange={(e) => setForm((p) => ({ ...p, ptkp: e.target.value }))}
+                  placeholder="TK/0 atau jumlah"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Penghasilan Bruto</Label>
+                <Input
+                  type="number"
+                  value={form.penghasilan_bruto}
+                  onChange={(e) => setForm((p) => ({ ...p, penghasilan_bruto: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tarif (%)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.tarif}
+                  onChange={(e) => setForm((p) => ({ ...p, tarif: e.target.value }))}
+                  placeholder="5"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>PPh 21</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.pph21}
+                  onChange={(e) => setForm((p) => ({ ...p, pph21: e.target.value }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label>Keterangan</Label>
+                <textarea
+                  value={form.keterangan}
+                  onChange={(e) => setForm((p) => ({ ...p, keterangan: e.target.value }))}
+                  placeholder="Keterangan tambahan (opsional)"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => { resetForm(); setShowCreateForm(false); }}>Batal</Button>
+              <Button type="submit">Simpan</Button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
