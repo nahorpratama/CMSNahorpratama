@@ -53,6 +53,7 @@ const PPH21Calculation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
+  const ROWS_PER_PAGE = 20;
 
   const filteredRecords = useMemo(() => {
     if (!search.trim()) return records;
@@ -245,38 +246,38 @@ const PPH21Calculation = () => {
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="overflow-x-auto w-full">
-          <table className="min-w-[1200px] divide-y divide-border">
+          <table className="min-w-[2000px] table-fixed divide-y divide-border">
             <thead className="bg-muted/50">
               <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">No</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Name</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Gender</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Occupation</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Employee ID</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Alamat</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">NPWP</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Marital Status</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kategori TER</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Salary</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">BPJS TK (Company)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">BPJS Kes (Company)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">BPJS TK (Personal)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">BPJS Kes (Personal)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tunj. Lapangan</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tunj. Kendaraan</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tunj. Transportasi</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kehadiran HO</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kehadiran Proyek</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Lain-Lain</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kasbon</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Absen</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Take Home</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tunj. PPh21</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Objek Pajak</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tarif TER</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">PPh Masa/Bulanan</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">PPh21 NPWP</th>
-                <th className="px-3 py-2" />
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-12">No</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">Name</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-24">Gender</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Occupation</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Employee ID</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-72">Alamat</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">NPWP</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Marital Status</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Kategori TER</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Salary</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">BPJS TK (Company)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">BPJS Kes (Company)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">BPJS TK (Personal)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">BPJS Kes (Personal)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Tunj. Lapangan</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Tunj. Kendaraan</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">Tunj. Transportasi</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Kehadiran HO</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-44">Kehadiran Proyek</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Lain-Lain</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Kasbon</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-28">Absen</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Take Home</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Tunj. PPh21</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">Objek Pajak</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-28">Tarif TER</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">PPh Masa/Bulanan</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">PPh21 NPWP</th>
+                <th className="px-3 py-2 w-32" />
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -290,37 +291,37 @@ const PPH21Calculation = () => {
                   <td colSpan={29} className="px-3 py-6 text-center text-sm text-muted-foreground">Tidak ada data</td>
                 </tr>
               )}
-              {!loading && filteredRecords.map((row, idx) => (
-                <tr key={row.employeeid} className="hover:bg-muted/30">
-                  <td className="px-3 py-2 text-sm">{idx + 1}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.name || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.gender || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.occupation || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.employeeid}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap max-w-[220px] truncate" title={row.alamat || ''}>{row.alamat || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.npwp || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.marital_status || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.kategori_ter || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.salary != null ? currencyId.format(row.salary) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.bpjs_tk_company != null ? currencyId.format(row.bpjs_tk_company) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.bpjs_kesehatan_company != null ? currencyId.format(row.bpjs_kesehatan_company) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.bpjs_tk_personal != null ? currencyId.format(row.bpjs_tk_personal) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.bpjs_kesehatan_personal != null ? currencyId.format(row.bpjs_kesehatan_personal) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_lapangan != null ? currencyId.format(row.tunjangan_lapangan) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_kendaraan != null ? currencyId.format(row.tunjangan_kendaraan) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_transportasi != null ? currencyId.format(row.tunjangan_transportasi) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_kehadiran_ho != null ? currencyId.format(row.tunjangan_kehadiran_ho) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_kehadiran_proyek != null ? currencyId.format(row.tunjangan_kehadiran_proyek) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.lain_lain != null ? currencyId.format(row.lain_lain) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.kasbon != null ? currencyId.format(row.kasbon) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.absen != null ? row.absen : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.take_home != null ? currencyId.format(row.take_home) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tunjangan_pph21 != null ? currencyId.format(row.tunjangan_pph21) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.objek_pajak || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tarif_ter != null ? `${row.tarif_ter}%` : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.pph_masa != null ? currencyId.format(row.pph_masa) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.pph21_npwp != null ? currencyId.format(row.pph21_npwp) : '-'}</td>
-                  <td className="px-3 py-2 text-right">
+              {!loading && filteredRecords.slice(0, ROWS_PER_PAGE).map((row, idx) => (
+                <tr key={row.employeeid} className="hover:bg-muted/40 transition-colors">
+                  <td className="px-3 py-2 text-sm w-12">{idx + 1}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.name || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-24">{row.gender || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.occupation || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.employeeid}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-72 max-w-[288px] truncate" title={row.alamat || ''}>{row.alamat || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.npwp || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.marital_status || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.kategori_ter || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.salary != null ? currencyId.format(row.salary) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.bpjs_tk_company != null ? currencyId.format(row.bpjs_tk_company) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.bpjs_kesehatan_company != null ? currencyId.format(row.bpjs_kesehatan_company) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.bpjs_tk_personal != null ? currencyId.format(row.bpjs_tk_personal) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.bpjs_kesehatan_personal != null ? currencyId.format(row.bpjs_kesehatan_personal) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.tunjangan_lapangan != null ? currencyId.format(row.tunjangan_lapangan) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.tunjangan_kendaraan != null ? currencyId.format(row.tunjangan_kendaraan) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.tunjangan_transportasi != null ? currencyId.format(row.tunjangan_transportasi) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.tunjangan_kehadiran_ho != null ? currencyId.format(row.tunjangan_kehadiran_ho) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-44">{row.tunjangan_kehadiran_proyek != null ? currencyId.format(row.tunjangan_kehadiran_proyek) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.lain_lain != null ? currencyId.format(row.lain_lain) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.kasbon != null ? currencyId.format(row.kasbon) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-28">{row.absen != null ? row.absen : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.take_home != null ? currencyId.format(row.take_home) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.tunjangan_pph21 != null ? currencyId.format(row.tunjangan_pph21) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.objek_pajak || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-28">{row.tarif_ter != null ? `${row.tarif_ter}%` : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.pph_masa != null ? currencyId.format(row.pph_masa) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.pph21_npwp != null ? currencyId.format(row.pph21_npwp) : '-'}</td>
+                  <td className="px-3 py-2 text-right w-32">
                     <div className="flex items-center justify-end gap-2">
                       <Button variant="outline" size="sm" onClick={() => handleOpenEdit(row)}>
                         <Edit className="w-4 h-4" />

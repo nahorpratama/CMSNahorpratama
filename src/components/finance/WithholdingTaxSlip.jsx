@@ -45,6 +45,7 @@ const WithholdingTaxSlip = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [search, setSearch] = useState('');
+  const ROWS_PER_PAGE = 20;
 
   const filteredRecords = useMemo(() => {
     if (!search.trim()) return records;
@@ -221,30 +222,30 @@ const WithholdingTaxSlip = () => {
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="overflow-x-auto w-full">
-          <table className="min-w-[1200px] divide-y divide-border">
+          <table className="min-w-[1800px] table-fixed divide-y divide-border">
             <thead className="bg-muted/50">
               <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">No</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">NPWP</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Employee ID</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Nama</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Nomor Faktur</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tanggal Faktur</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Masa (PPN)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tahun (PPN)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status Faktur</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">DPP (Rp)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">PPN</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">PPnBM</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Keterangan</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">PPh (%)</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Bukti Potong</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">No Bukti Potong</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Nilai Bukti Potong</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Masa Pajak</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Tahun Pajak</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Keterangan Bukti Potong</th>
-                <th className="px-3 py-2" />
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-12">No</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">NPWP</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-32">Employee ID</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-48">Nama</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-44">Nomor Faktur</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Tanggal Faktur</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">Masa (PPN)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">Tahun (PPN)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Status Faktur</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">DPP (Rp)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">PPN</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">PPnBM</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-64">Keterangan</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-28">PPh (%)</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-40">Bukti Potong</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-44">No Bukti Potong</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-44">Nilai Bukti Potong</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">Masa Pajak</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-36">Tahun Pajak</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-64">Keterangan Bukti Potong</th>
+                <th className="px-3 py-2 w-32" />
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -258,29 +259,29 @@ const WithholdingTaxSlip = () => {
                   <td colSpan={21} className="px-3 py-6 text-center text-sm text-muted-foreground">Tidak ada data</td>
                 </tr>
               )}
-              {!loading && filteredRecords.map((row, idx) => (
-                <tr key={row.employeeid} className="hover:bg-muted/30">
-                  <td className="px-3 py-2 text-sm">{idx + 1}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.npwp || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.employeeid}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.nama || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.nomor_faktur || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tanggal_faktur ? new Date(row.tanggal_faktur).toLocaleDateString('id-ID') : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.masa_ppn || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tahun_ppn || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.status_faktur || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.dpp != null ? currencyId.format(row.dpp) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.ppn != null ? currencyId.format(row.ppn) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.ppnbm != null ? currencyId.format(row.ppnbm) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap max-w-[260px] truncate" title={row.keterangan || ''}>{row.keterangan || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.pph_persen != null ? `${row.pph_persen}%` : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.bukti_potong || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.no_bukti_potong || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.nilai_bukti_potong != null ? currencyId.format(row.nilai_bukti_potong) : '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.masa_pajak || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap">{row.tahun_pajak || '-'}</td>
-                  <td className="px-3 py-2 text-sm whitespace-nowrap max-w-[260px] truncate" title={row.keterangan_bukti_potong || ''}>{row.keterangan_bukti_potong || '-'}</td>
-                  <td className="px-3 py-2 text-right">
+              {!loading && filteredRecords.slice(0, ROWS_PER_PAGE).map((row, idx) => (
+                <tr key={row.employeeid} className="hover:bg-muted/40 transition-colors">
+                  <td className="px-3 py-2 text-sm w-12">{idx + 1}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.npwp || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-32">{row.employeeid}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-48">{row.nama || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-44">{row.nomor_faktur || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.tanggal_faktur ? new Date(row.tanggal_faktur).toLocaleDateString('id-ID') : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.masa_ppn || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.tahun_ppn || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.status_faktur || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.dpp != null ? currencyId.format(row.dpp) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.ppn != null ? currencyId.format(row.ppn) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.ppnbm != null ? currencyId.format(row.ppnbm) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-64 truncate" title={row.keterangan || ''}>{row.keterangan || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-28">{row.pph_persen != null ? `${row.pph_persen}%` : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-40">{row.bukti_potong || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-44">{row.no_bukti_potong || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-44">{row.nilai_bukti_potong != null ? currencyId.format(row.nilai_bukti_potong) : '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.masa_pajak || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-36">{row.tahun_pajak || '-'}</td>
+                  <td className="px-3 py-2 text-sm whitespace-nowrap w-64 truncate" title={row.keterangan_bukti_potong || ''}>{row.keterangan_bukti_potong || '-'}</td>
+                  <td className="px-3 py-2 text-right w-32">
                     <div className="flex items-center justify-end gap-2">
                       <Button variant="outline" size="sm" onClick={() => handleOpenEdit(row)}>
                         <Edit className="w-4 h-4" />
