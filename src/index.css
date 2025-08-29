@@ -113,6 +113,12 @@ body {
   @apply bg-muted/50;
 }
 
+/* Dedicated container so only the table area scrolls horizontally */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Prevent global horizontal scroll; only allow it in table wrappers */
 html, body {
   overflow-x: hidden;

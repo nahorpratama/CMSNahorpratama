@@ -222,7 +222,7 @@ const WithholdingTaxSlip = () => {
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
-        <div className="overflow-x-auto w-full">
+        <div className="table-container w-full">
           <table className="min-w-[1800px] table-fixed divide-y divide-border">
             <thead className="bg-muted/50">
               <tr className="sticky top-0 bg-muted/70 backdrop-blur supports-[backdrop-filter]:bg-muted/60">
