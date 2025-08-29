@@ -206,14 +206,15 @@ const WithholdingTaxSlip = () => {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4">
-        <div className="w-full md:flex-1 min-w-0">
+        <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg flex-none min-w-0">
           <Input
             placeholder="Cari nama, employeeid, atau NPWP..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="w-full"
           />
         </div>
-        <div className="text-sm text-muted-foreground w-full md:w-auto pt-2 md:pt-0">
+        <div className="text-sm text-muted-foreground w-auto pt-2 md:pt-0 flex-none">
           Total: {filteredRecords.length}
         </div>
       </div>
