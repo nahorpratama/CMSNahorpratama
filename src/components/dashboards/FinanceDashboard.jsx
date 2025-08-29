@@ -256,7 +256,7 @@ const FinanceDashboard = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-2 md:gap-3">
           <NavLink to="/dashboard/finance" end className={({ isActive }) => `glass-effect border-blue-500/30 hover:bg-blue-500/20 rounded-md px-4 py-2 flex items-center gap-2 transition-all ${isActive ? 'bg-blue-500/30' : ''}`}>
             <DollarSign className="w-4 h-4" />
             {t.navigation.overview}

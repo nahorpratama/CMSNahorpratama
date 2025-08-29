@@ -230,7 +230,7 @@ const PPH21Calculation = () => {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4">
-        <div className="w-full md:w-auto md:max-w-md lg:max-w-lg flex-1 md:flex-none min-w-0">
+        <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg flex-none min-w-0">
           <Input
             placeholder="Cari name, employeeid, atau NPWP..."
             value={search}
