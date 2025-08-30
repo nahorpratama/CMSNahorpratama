@@ -32,6 +32,7 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --radius: 0.75rem;
+    --table-col-min: 14rem;
   }
 
   .dark {
@@ -119,6 +120,11 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Limit visible columns to 5, remaining accessible via horizontal scroll */
+.table-container.limited-cols-5 {
+  max-width: calc(var(--table-col-min) * 5);
+}
+
 /* Prevent global horizontal scroll; only allow it in table wrappers */
 html, body {
   overflow-x: hidden;
@@ -135,6 +141,12 @@ html, body {
 .data-table,
 table {
   max-width: 100%;
+}
+
+/* Ensure consistent minimum column width so 5 columns occupy container width */
+.table-fixed-cols th,
+.table-fixed-cols td {
+  min-width: var(--table-col-min);
 }
 
 .status-badge {

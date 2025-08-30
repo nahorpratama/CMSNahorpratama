@@ -523,8 +523,8 @@ const PPH21Calculation = () => {
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
-        <div className="table-container w-full">
-          <table className="min-w-[2000px] table-fixed divide-y divide-border">
+        <div className="table-container limited-cols-5 w-full">
+          <table className="min-w-[2000px] table-fixed table-fixed-cols divide-y divide-border">
             <thead className="bg-muted/50">
               <tr className="sticky top-0 bg-muted/70 backdrop-blur supports-[backdrop-filter]:bg-muted/60">
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-12">No</th>

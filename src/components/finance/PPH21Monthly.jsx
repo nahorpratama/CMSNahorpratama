@@ -290,8 +290,8 @@ const PPH21Monthly = () => {
 
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full divide-y divide-border">
+        <div className="table-container limited-cols-5 w-full">
+          <table className="min-w-full table-fixed table-fixed-cols divide-y divide-border">
             <thead className="bg-muted/50">
               <tr>
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">No</th>
