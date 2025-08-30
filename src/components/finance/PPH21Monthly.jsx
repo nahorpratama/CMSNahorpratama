@@ -291,7 +291,7 @@ const PPH21Monthly = () => {
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
         <div className="table-container limited-cols-5 w-full">
-          <table className="min-w-full table-fixed table-fixed-cols cols-5-fixed divide-y divide-border">
+          <table className="pph21-monthly-table min-w-full table-fixed table-fixed-cols cols-5-fixed divide-y divide-border">
             <thead className="bg-muted/50">
               <tr>
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">No</th>

@@ -156,6 +156,90 @@ table {
   min-width: 0;
 }
 
+/* Character-based widths per table type */
+/* PPH21 Monthly: 11 kolom */
+.pph21-monthly-table th:nth-child(1), .pph21-monthly-table td:nth-child(1) { min-width: 4ch; }
+.pph21-monthly-table th:nth-child(2), .pph21-monthly-table td:nth-child(2) { min-width: 20ch; }
+.pph21-monthly-table th:nth-child(3), .pph21-monthly-table td:nth-child(3) { min-width: 24ch; }
+.pph21-monthly-table th:nth-child(4), .pph21-monthly-table td:nth-child(4) { min-width: 12ch; }
+.pph21-monthly-table th:nth-child(5), .pph21-monthly-table td:nth-child(5) { min-width: 14ch; }
+.pph21-monthly-table th:nth-child(6), .pph21-monthly-table td:nth-child(6) { min-width: 8ch; }
+.pph21-monthly-table th:nth-child(7), .pph21-monthly-table td:nth-child(7) { min-width: 14ch; }
+.pph21-monthly-table th:nth-child(8), .pph21-monthly-table td:nth-child(8) { min-width: 8ch; }
+.pph21-monthly-table th:nth-child(9), .pph21-monthly-table td:nth-child(9) { min-width: 14ch; }
+.pph21-monthly-table th:nth-child(10), .pph21-monthly-table td:nth-child(10) { min-width: 28ch; }
+.pph21-monthly-table th:nth-child(11), .pph21-monthly-table td:nth-child(11) { min-width: 12ch; }
+
+/* PPH Unifikasi: 14 kolom */
+.pph-unifikasi-table th:nth-child(1), .pph-unifikasi-table td:nth-child(1) { min-width: 4ch; }
+.pph-unifikasi-table th:nth-child(2), .pph-unifikasi-table td:nth-child(2) { min-width: 12ch; }
+.pph-unifikasi-table th:nth-child(3), .pph-unifikasi-table td:nth-child(3) { min-width: 20ch; }
+.pph-unifikasi-table th:nth-child(4), .pph-unifikasi-table td:nth-child(4) { min-width: 24ch; }
+.pph-unifikasi-table th:nth-child(5), .pph-unifikasi-table td:nth-child(5) { min-width: 16ch; }
+.pph-unifikasi-table th:nth-child(6), .pph-unifikasi-table td:nth-child(6) { min-width: 12ch; }
+.pph-unifikasi-table th:nth-child(7), .pph-unifikasi-table td:nth-child(7) { min-width: 14ch; }
+.pph-unifikasi-table th:nth-child(8), .pph-unifikasi-table td:nth-child(8) { min-width: 14ch; }
+.pph-unifikasi-table th:nth-child(9), .pph-unifikasi-table td:nth-child(9) { min-width: 14ch; }
+.pph-unifikasi-table th:nth-child(10), .pph-unifikasi-table td:nth-child(10) { min-width: 8ch; }
+.pph-unifikasi-table th:nth-child(11), .pph-unifikasi-table td:nth-child(11) { min-width: 14ch; }
+.pph-unifikasi-table th:nth-child(12), .pph-unifikasi-table td:nth-child(12) { min-width: 16ch; }
+.pph-unifikasi-table th:nth-child(13), .pph-unifikasi-table td:nth-child(13) { min-width: 20ch; }
+.pph-unifikasi-table th:nth-child(14), .pph-unifikasi-table td:nth-child(14) { min-width: 12ch; }
+
+/* Withholding Tax Slip: 21 kolom */
+.withholding-table th:nth-child(1), .withholding-table td:nth-child(1) { min-width: 4ch; }
+.withholding-table th:nth-child(2), .withholding-table td:nth-child(2) { min-width: 20ch; }
+.withholding-table th:nth-child(3), .withholding-table td:nth-child(3) { min-width: 12ch; }
+.withholding-table th:nth-child(4), .withholding-table td:nth-child(4) { min-width: 24ch; }
+.withholding-table th:nth-child(5), .withholding-table td:nth-child(5) { min-width: 20ch; }
+.withholding-table th:nth-child(6), .withholding-table td:nth-child(6) { min-width: 12ch; }
+.withholding-table th:nth-child(7), .withholding-table td:nth-child(7) { min-width: 8ch; }
+.withholding-table th:nth-child(8), .withholding-table td:nth-child(8) { min-width: 8ch; }
+.withholding-table th:nth-child(9), .withholding-table td:nth-child(9) { min-width: 16ch; }
+.withholding-table th:nth-child(10), .withholding-table td:nth-child(10) { min-width: 14ch; }
+.withholding-table th:nth-child(11), .withholding-table td:nth-child(11) { min-width: 12ch; }
+.withholding-table th:nth-child(12), .withholding-table td:nth-child(12) { min-width: 12ch; }
+.withholding-table th:nth-child(13), .withholding-table td:nth-child(13) { min-width: 32ch; }
+.withholding-table th:nth-child(14), .withholding-table td:nth-child(14) { min-width: 10ch; }
+.withholding-table th:nth-child(15), .withholding-table td:nth-child(15) { min-width: 16ch; }
+.withholding-table th:nth-child(16), .withholding-table td:nth-child(16) { min-width: 20ch; }
+.withholding-table th:nth-child(17), .withholding-table td:nth-child(17) { min-width: 16ch; }
+.withholding-table th:nth-child(18), .withholding-table td:nth-child(18) { min-width: 10ch; }
+.withholding-table th:nth-child(19), .withholding-table td:nth-child(19) { min-width: 10ch; }
+.withholding-table th:nth-child(20), .withholding-table td:nth-child(20) { min-width: 32ch; }
+.withholding-table th:nth-child(21), .withholding-table td:nth-child(21) { min-width: 12ch; }
+
+/* PPH21 Calculation: 29 kolom */
+.pph21-calc-table th:nth-child(1), .pph21-calc-table td:nth-child(1) { min-width: 4ch; }
+.pph21-calc-table th:nth-child(2), .pph21-calc-table td:nth-child(2) { min-width: 24ch; }
+.pph21-calc-table th:nth-child(3), .pph21-calc-table td:nth-child(3) { min-width: 10ch; }
+.pph21-calc-table th:nth-child(4), .pph21-calc-table td:nth-child(4) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(5), .pph21-calc-table td:nth-child(5) { min-width: 12ch; }
+.pph21-calc-table th:nth-child(6), .pph21-calc-table td:nth-child(6) { min-width: 32ch; }
+.pph21-calc-table th:nth-child(7), .pph21-calc-table td:nth-child(7) { min-width: 20ch; }
+.pph21-calc-table th:nth-child(8), .pph21-calc-table td:nth-child(8) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(9), .pph21-calc-table td:nth-child(9) { min-width: 12ch; }
+.pph21-calc-table th:nth-child(10), .pph21-calc-table td:nth-child(10) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(11), .pph21-calc-table td:nth-child(11) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(12), .pph21-calc-table td:nth-child(12) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(13), .pph21-calc-table td:nth-child(13) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(14), .pph21-calc-table td:nth-child(14) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(15), .pph21-calc-table td:nth-child(15) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(16), .pph21-calc-table td:nth-child(16) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(17), .pph21-calc-table td:nth-child(17) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(18), .pph21-calc-table td:nth-child(18) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(19), .pph21-calc-table td:nth-child(19) { min-width: 32ch; }
+.pph21-calc-table th:nth-child(20), .pph21-calc-table td:nth-child(20) { min-width: 14ch; }
+.pph21-calc-table th:nth-child(21), .pph21-calc-table td:nth-child(21) { min-width: 12ch; }
+.pph21-calc-table th:nth-child(22), .pph21-calc-table td:nth-child(22) { min-width: 8ch; }
+.pph21-calc-table th:nth-child(23), .pph21-calc-table td:nth-child(23) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(24), .pph21-calc-table td:nth-child(24) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(25), .pph21-calc-table td:nth-child(25) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(26), .pph21-calc-table td:nth-child(26) { min-width: 8ch; }
+.pph21-calc-table th:nth-child(27), .pph21-calc-table td:nth-child(27) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(28), .pph21-calc-table td:nth-child(28) { min-width: 16ch; }
+.pph21-calc-table th:nth-child(29), .pph21-calc-table td:nth-child(29) { min-width: 12ch; }
+
 .status-badge {
   @apply px-3 py-1 rounded-full text-xs font-medium border;
 }
