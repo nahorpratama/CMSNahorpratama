@@ -325,7 +325,7 @@ const PPHUnifikasi = () => {
       <div className="rounded-md border border-border overflow-hidden">
         <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30">Menampilkan 20 baris data</div>
         <div className="table-container limited-cols-5 w-full">
-          <table className="min-w-[1600px] table-fixed table-fixed-cols divide-y divide-border">
+          <table className="min-w-[1600px] table-fixed table-fixed-cols cols-5-fixed divide-y divide-border">
             <thead className="bg-muted/50">
               <tr className="sticky top-0 bg-muted/70 backdrop-blur supports-[backdrop-filter]:bg-muted/60">
                 <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-12">No</th>

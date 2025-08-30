@@ -122,7 +122,7 @@ body {
 
 /* Limit visible columns to 5, remaining accessible via horizontal scroll */
 .table-container.limited-cols-5 {
-  max-width: calc(var(--table-col-min) * 5);
+  max-width: 100%;
 }
 
 /* Prevent global horizontal scroll; only allow it in table wrappers */
@@ -147,6 +147,13 @@ table {
 .table-fixed-cols th,
 .table-fixed-cols td {
   min-width: var(--table-col-min);
+}
+
+/* Ensure exactly 5 columns fill the viewport width; extra columns overflow */
+.cols-5-fixed th,
+.cols-5-fixed td {
+  width: 20%;
+  min-width: 0;
 }
 
 .status-badge {
